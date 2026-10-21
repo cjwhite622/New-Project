@@ -36,6 +36,8 @@ jobs:
         run: npm run test:desktop:windows
         env:
           HUB_DESKTOP_EXECUTABLE: release/win-unpacked/The Hub.exe
+      - name: Check installer and workspace preservation
+        run: npm run test:installer:windows
       - name: Prepare portable application
         run: npm run package:portable
       - name: Upload portable download

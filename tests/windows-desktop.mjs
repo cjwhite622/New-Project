@@ -9,13 +9,16 @@ import {_electron as electron} from 'playwright-core';
 if(process.platform!=='win32'||process.env.GITHUB_ACTIONS!=='true'||process.env.RUNNER_ENVIRONMENT!=='github-hosted'||!process.env.APPDATA){
   throw new Error('This test requires a disposable GitHub-hosted Windows runner.');
 }
+const executable=process.env.HUB_DESKTOP_EXECUTABLE;
+const kind=process.env.HUB_CI_DESKTOP_KIND||(executable?'packaged':'source');
+assert.ok(['source','packaged','installed'].includes(kind),'Unknown desktop evidence name.');
+const keepProfile=process.env.HUB_CI_KEEP_PROFILE==='true';
+assert.ok(!keepProfile||kind==='installed','Only the installed lifecycle check may retain its synthetic profile.');
 const profile=join(process.env.APPDATA,'The Hub');
 await mkdir(profile); // Abort if a profile already exists.
 const ownership=join(profile,'.windows-smoke-owner');
 const marker=randomUUID();
 await writeFile(ownership,marker);
-const executable=process.env.HUB_DESKTOP_EXECUTABLE;
-const kind=executable?'packaged':'source';
 let application;
 try{
   application=await electron.launch({
@@ -45,5 +48,5 @@ try{
     const timeout=setTimeout(()=>application.process().kill(),10000);
     try{await application.close();}finally{clearTimeout(timeout);}
   }
-  if(await readFile(ownership,'utf8')===marker)await rm(profile,{recursive:true,force:true});
+  if(!keepProfile&&await readFile(ownership,'utf8')===marker)await rm(profile,{recursive:true,force:true});
 }

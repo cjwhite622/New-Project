@@ -15,6 +15,7 @@
     "test:browser": "node tests/browser.mjs",
     "test:desktop": "node tests/desktop.mjs",
     "test:desktop:windows": "node tests/windows-desktop.mjs",
+    "test:installer:windows": "node tests/windows-installer.mjs",
     "desktop": "npm run build && electron .",
     "package:win": "npm run build && node scripts/package-windows.mjs",
     "package:portable": "node scripts/package-portable.mjs",
