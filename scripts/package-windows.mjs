@@ -18,17 +18,26 @@ async function run(binary, args, env = process.env) {
   });
 }
 
+async function hasEntries(dir) {
+  try {
+    const entries = await readdir(dir, { withFileTypes: true });
+    return entries.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 async function resolveAppDir() {
   const candidates = [
-    join(root, 'release', 'win-unpacked'),
-    join(root, 'release', 'win-unpacked', 'The Hub'),
     join(root, 'release', 'win-unpacked', 'The Hub-win32-x64'),
+    join(root, 'release', 'win-unpacked', 'The Hub'),
+    join(root, 'release', 'win-unpacked'),
   ];
 
   for (const candidate of candidates) {
     try {
       const info = await stat(candidate);
-      if (info.isDirectory()) return candidate;
+      if (info.isDirectory() && await hasEntries(candidate)) return candidate;
     } catch {
       // Keep checking the remaining candidates.
     }
@@ -45,12 +54,12 @@ async function resolveAppDir() {
   const fallback = entries
     .filter(entry => entry.isDirectory())
     .map(entry => join(releaseRoot, entry.name))
-    .find(candidate => /(?:^|-)unpacked$/i.test(candidate) || /The Hub.*win/i.test(candidate));
+    .find(candidate => (/(?:^|-)unpacked$/i.test(candidate) || /The Hub.*win/i.test(candidate)) && hasEntries(candidate));
 
   if (fallback) return fallback;
 
   throw new Error(
-    `Electron Builder did not produce an unpacked Windows app directory in ${join(root, 'release')}. ` +
+    `Electron Builder did not produce a non-empty unpacked Windows app directory in ${join(root, 'release')}. ` +
     'Check the build output before packaging the installer.'
   );
 }
