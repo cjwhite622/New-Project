@@ -1,5 +1,5 @@
 import {spawn} from 'node:child_process';
-import {readdir,readFile,writeFile} from 'node:fs/promises';
+import {readdir,readFile,stat,writeFile} from 'node:fs/promises';
 import {resolve,relative,join} from 'node:path';
 import {getMakeNsisPath} from 'app-builder-lib/out/toolsets/windows.js';
 const root=resolve('.');
@@ -8,6 +8,14 @@ if(!/^\d+\.\d+\.\d+$/.test(version))throw new Error('The NSIS release version mu
 async function run(binary,args,env=process.env){await new Promise((resolve,reject)=>{const child=spawn(binary,args,{stdio:'inherit',env});child.once('error',reject);child.once('exit',code=>code===0?resolve():reject(new Error(`Build command exited ${code}`)));});}
 await run(process.execPath,['node_modules/electron-builder/out/cli/cli.js','--win','dir','--x64']);
 const appDir=join(root,'release/win-unpacked');const files=[],dirs=[];
+// Validate the configured Windows output rather than selecting a different
+// unpacked directory (which could contain an old build or another platform).
+for(const required of ['The Hub.exe',join('resources','app.asar')]){
+  const file=join(appDir,required);
+  let info;
+  try{info=await stat(file);}catch(error){throw new Error(`Windows packaging requires ${file}. Check Electron Builder output.`,{cause:error});}
+  if(!info.isFile()||info.size===0)throw new Error(`Windows application file is empty or invalid: ${file}`);
+}
 async function walk(dir){for(const entry of await readdir(dir,{withFileTypes:true})){const file=join(dir,entry.name);if(entry.isDirectory()){await walk(file);dirs.push(relative(appDir,file));}else if(entry.isFile())files.push(relative(appDir,file));else throw new Error('Unexpected symbolic link in Windows application.');}}
 await walk(appDir);
 const escape=value=>value.replaceAll('$','$$').replaceAll('"','$\\"').replaceAll('/','\\');
