@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Your Brand — Get More Clients</title>
+  <meta name="description" content="A simple, high-converting landing page for your offer." />
+  <style>
+    :root{
+      --bg:#0b0e14; --card:#121826; --text:#e7ecf3; --muted:#a7b0c2;
+      --accent:#6ee7ff; --accent2:#a78bfa; --border:rgba(255,255,255,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(110,231,255,.15), transparent 55%),
+                  radial-gradient(1000px 500px at 80% 20%, rgba(167,139,250,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+    a{color:inherit}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 18px 80px;}
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 0; position:sticky; top:0; backdrop-filter: blur(10px);
+      background: rgba(11,14,20,.55); border-bottom:1px solid var(--border);
+      z-index:10;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px}
+    .dot{width:10px; height:10px; border-radius:999px; background:linear-gradient(135deg,var(--accent),var(--accent2));}
+    .nav a{font-size:14px; color:var(--muted); text-decoration:none; margin-left:16px}
+    .nav a:hover{color:var(--text)}
+    .hero{display:grid; grid-template-columns:1.3fr .9fr; gap:18px; padding:34px 0 16px}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+    .card{
+      background:rgba(18,24,38,.72);
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.35);
+      padding:22px;
+    }
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      border:1px solid var(--border); color:var(--muted);
+      padding:6px 10px; border-radius:999px; font-size:13px;
+      background:rgba(255,255,255,.03);
+    }
+    h1{margin:14px 0 10px; font-size:42px; line-height:1.1}
+    @media (max-width:520px){h1{font-size:34px}}
+    .sub{color:var(--muted); font-size:16px; margin:0 0 16px}
+    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:12px 14px; border-radius:12px; border:1px solid var(--border);
+      background:rgba(255,255,255,.04); color:var(--text);
+      text-decoration:none; font-weight:600;
+    }
+    .btn.primary{
+      border:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#071018;
+    }
+    .btn:hover{transform: translateY(-1px); transition: .15s ease}
+    .points{display:grid; gap:10px; margin-top:16px}
+    .point{display:flex; gap:10px; color:var(--muted)}
+    .tick{flex:0 0 auto; width:18px; height:18px; border-radius:6px;
+      background:rgba(110,231,255,.18); border:1px solid rgba(110,231,255,.35);}
+    .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px}
+    @media (max-width:900px){.grid3{grid-template-columns:1fr}}
+    h2{margin:0 0 10px; font-size:22px}
+    .muted{color:var(--muted)}
+    .section{margin-top:16px}
+    .small{font-size:13px; color:var(--muted)}
+    input, textarea, select{
+      width:100%; padding:12px 12px; border-radius:12px;
+      border:1px solid var(--border); background:rgba(255,255,255,.03);
+      color:var(--text); outline:none;
+    }
+    textarea{min-height:96px; resize:vertical}
+    label{display:block; font-size:13px; color:var(--muted); margin:10px 0 6px}
+    .footer{margin-top:24px; text-align:center; color:var(--muted); font-size:13px}
+    .divider{height:1px; background:var(--border); margin:14px 0}
+    .kpi{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .chip{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:13px; color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand"><span class="dot"></span> <span id="brandName">Your Brand</span></div>
+      <div>
+        <a href="#offer">Offer</a>
+        <a href="#proof">Proof</a>
+        <a href="#faq">FAQ</a>
+        <a href="#apply">Apply</a>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card">
+        <span class="badge">⚡ Fast Results • Simple System • Done With You</span>
+        <h1 id="headline">Get more clients by installing a simple sales system that follows up like a machine.</h1>
+        <p class="sub" id="subhead">
+          In 14–30 days, we’ll tighten your message, build a clean funnel, and set up follow-up automation so you stop relying on motivation.
+        </p>
+
+        <div class="ctaRow">
+          <!-- Replace # with your actual Calendly link -->
+          <a class="btn primary" id="primaryCta" href="#apply">Apply for a Call</a>
+          <!-- Replace # with your checkout link (Stripe, PayPal, etc.) if you want -->
+          <a class="btn" id="secondaryCta" href="#offer">See How It Works</a>
+        </div>
+
+        <div class="points">
+          <div class="point"><span class="tick"></span> Clear offer + positioning (so people “get it” instantly)</div>
+          <div class="point"><span class="tick"></span> Landing page + lead capture + basic email/SMS follow-up</div>
+          <div class="point"><span class="tick"></span> Scripted sales call structure to close confidently</div>
+        </div>
+
+        <div class="kpi">
+          <span class="chip">🎯 Ideal for: services, coaching, local businesses</span>
+          <span class="chip">⏱️ Timeline: 7–21 days</span>
+          <span class="chip">💬 Delivery: weekly calls + async support</span>
+        </div>
+      </div>
+
+      <!-- LEAD MAGNET / QUICK OPT-IN -->
+      <div class="card">
+        <h2>Get the free script</h2>
+        <p class="muted">Drop your email and I’ll send a plug-and-play DM + follow-up script you can use today.</p>
+
+        <!-- Replace action with your email provider form endpoint OR use a tool like Formspree -->
+        <form id="leadForm" action="#" method="post" onsubmit="return handleLeadSubmit(event)">
+          <label for="name">Name</label>
+          <input id="name" name="name" placeholder="Your name" required />
+
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@email.com" required />
+
+          <label for="niche">What are you selling?</label>
+          <input id="niche" name="niche" placeholder="Example: coaching / roofing / consulting" />
+
+          <div class="ctaRow" style="margin-top:14px;">
+            <button class="btn primary" type="submit" style="cursor:pointer; width:100%;">Send it</button>
+          </div>
+
+          <p class="small" id="formNote">No spam. One email with the script.</p>
+        </form>
+
+        <div class="divider"></div>
+
+        <p class="small">
+          Want this built for you? Book a quick call and I’ll map your funnel + follow-up in 15 minutes.
+        </p>
+        <!-- Replace with your Calendly link -->
+        <a class="btn" href="#" id="calendlyLink">Book a Call (Calendly)</a>
+      </div>
+    </div>
+
+    <!-- OFFER -->
+    <div class="section card" id="offer">
+      <h2>What you get</h2>
+      <p class="muted">A simple funnel that turns attention into booked calls — without overcomplicating it.</p>
+      <div class="grid3">
+        <div class="card" style="padding:16px;">
+          <h2 style="font-size:18px;margin:0 0 6px;">1) Offer + Message</h2>
+          <p class="muted">We tighten your one-liner, promise, and audience so your page and DMs convert.</p>
+        </div>
+        <div class="card" style="padding:16px;">
+          <h2 style="font-size:18px;margin:0 0 6px;">2) Landing Page + Lead Capture</h2>
+          <p class="muted">A clean page with one goal: capture leads or book calls.</p>
+        </div>
+        <div class="card" style="padding:16px;">
+          <h2 style="font-size:18px;margin:0 0 6px;">3) Follow-Up Automation</h2>
+          <p class="muted">Email/SMS follow-up so leads don’t leak and you stop chasing people.</p>
+        </div>
+      </div>
+
+      <div class="ctaRow" style="margin-top:14px;">
+        <a class="btn primary" href="#apply">Apply for a Call</a>
+        <a class="btn" href="#faq">Questions?</a>
+      </div>
+    </div>
+
+    <!-- PROOF -->
+    <div class="section card" id="proof">
+      <h2>Proof / results (add yours)</h2>
+      <p class="muted">Drop in screenshots, testimonials, or short case studies here. Even 2–3 strong wins help conversion a lot.</p>
+      <div class="grid3">
+        <div class="card" style="padding:16px;">
+          <p class="muted">“In 2 weeks we went from inconsistent leads to booked calls daily.”</p>
+          <p class="small">— Client Name, Business Type</p>
+        </div>
+        <div class="card" style="padding:16px;">
+          <p class="muted">“The follow-up system alone paid for itself.”</p>
+          <p class="small">— Client Name, Business Type</p>
+        </div>
+        <div class="card" style="padding:16px;">
+          <p class="muted">“Clear offer + scripts = easiest closes I’ve had.”</p>
+          <p class="small">— Client Name, Business Type</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section card" id="faq">
+      <h2>FAQ</h2>
+      <p class="muted"><b>How fast can I launch?</b><br/>If you have your offer, you can launch in 24–72 hours. Optimization happens over 2–3 weeks.</p>
+      <p class="muted"><b>Do I need a big audience?</b><br/>No. You need a clear offer + consistent outreach or ads.</p>
+      <p class="muted"><b>What tools do I need?</b><br/>Calendly + Stripe (optional) + an email tool. Or use an all-in-one like HighLevel.</p>
+    </div>
+
+    <!-- APPLY -->
+    <div class="section card" id="apply">
+      <h2>Apply for a Call</h2>
+      <p class="muted">Answer 3 quick questions and I’ll tell you what to fix first to get momentum.</p>
+
+      <!-- This form works as a simple "mailto" fallback. Replace with a real endpoint later. -->
+      <form onsubmit="return handleApplySubmit(event)">
+        <label for="a1">What are you selling?</label>
+        <input id="a1" required placeholder="Example: fitness coaching / lead gen / home services" />
+
+        <label for="a2">What’s your #1 bottleneck right now?</label>
+        <input id="a2" required placeholder="Example: not enough leads / not closing / no follow-up" />
+
+        <label for="a3">If we fix this in 30 days, what’s that worth to you?</label>
+        <input id="a3" required placeholder="Example: $5k/mo, $10k/mo, etc." />
+
+        <div class="ctaRow" style="margin-top:14px;">
+          <button class="btn primary" type="submit" style="cursor:pointer;">Submit Application</button>
+          <!-- Replace with your Calendly link -->
+          <a class="btn" href="#" id="applyCalendly">Or book direct</a>
+        </div>
+        <p class="small" id="applyNote">This currently opens an email draft. Swap to a real form endpoint when ready.</p>
+      </form>
+    </div>
+
+    <div class="footer">
+      <div class="divider"></div>
+      © <span id="year"></span> <span id="brandName2">Your Brand</span>. All rights reserved.
+    </div>
+  </div>
+
+  <script>
+    // Set year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // QUICK CUSTOMIZATION (edit these)
+    const BRAND = "Your Brand";
+    const CALENDLY_URL = "https://calendly.com/YOUR-LINK"; // <-- replace
+    const CHECKOUT_URL = "https://buy.stripe.com/YOUR-LINK"; // <-- optional
+
+    // Apply branding/links
+    document.getElementById("brandName").textContent = BRAND;
+    document.getElementById("brandName2").textContent = BRAND;
+    document.getElementById("calendlyLink").href = CALENDLY_URL;
+    document.getElementById("applyCalendly").href = CALENDLY_URL;
+
+    // Example: if you want secondary CTA to checkout instead of scrolling
+    // document.getElementById("secondaryCta").href = CHECKOUT_URL;
+
+    function handleLeadSubmit(e){
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const niche = document.getElementById("niche").value.trim();
+
+      // Replace this with a real form integration (Formspree, ConvertKit, Mailchimp, HighLevel, etc.)
+      document.getElementById("formNote").textContent =
+        `Thanks, ${name || "there"} — you're in. (Hook this form to an email tool to actually deliver the script.)`;
+
+      // Basic local confirmation
+      console.log({name, email, niche});
+      return false;
+    }
+
+    function handleApplySubmit(e){
+      e.preventDefault();
+      const a1 = document.getElementById("a1").value.trim();
+      const a2 = document.getElementById("a2").value.trim();
+      const a3 = document.getElementById("a3").value.trim();
+
+      const subject = encodeURIComponent(`Application — ${BRAND}`);
+      const body = encodeURIComponent(
+        `Application details:\n\n1) Selling: ${a1}\n2) Bottleneck: ${a2}\n3) Worth in 30 days: ${a3}\n\nPreferred time for a call:\n`
+      );
+
+      // Replace with your email
+      window.location.href = `mailto:YOUR@email.com?subject=${subject}&body=${body}`;
+      return false;
+    }
+  </script>
+</body>
+</html>

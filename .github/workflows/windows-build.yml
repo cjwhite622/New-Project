@@ -1,0 +1,107 @@
+name: Windows build and download
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Build and test Windows application
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check domain and startup behavior
+        run: npm test
+      - name: Build interface
+        run: npm run build
+      - name: Check browser workflows on Windows
+        shell: pwsh
+        run: |
+          $chrome = @("$env:ProgramFiles\Google\Chrome\Application\chrome.exe", "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $chrome) { throw "The hosted runner's Chrome installation was not found." }
+          $env:HUB_CHROMIUM_PATH = $chrome
+          npm run test:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:providers:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:launch:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:shopify:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:chat:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build Windows installer
+        run: npm run package:win
+      - name: Check source desktop on Windows
+        run: npm run test:desktop:windows
+      - name: Check packaged desktop on Windows
+        run: npm run test:desktop:windows
+        env:
+          HUB_DESKTOP_EXECUTABLE: release/win-unpacked/The Hub.exe
+      - name: Check installer and workspace preservation
+        run: npm run test:installer:windows
+      - name: Prepare portable application
+        run: npm run package:portable
+      - name: Upload portable download
+        id: portable
+        uses: actions/upload-artifact@v4
+        with:
+          name: The-Hub-Windows-x64
+          path: release/portable-staging/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Upload installer download
+        id: installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: The-Hub-Installer
+          path: release/The Hub Setup *.exe
+          if-no-files-found: error
+          retention-days: 90
+      - name: Upload desktop test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-desktop-test-evidence
+          path: |
+            test-results/windows-*
+            test-results/launch-*.png
+            test-results/launch-accessibility.json
+            test-results/shopify-*.png
+            test-results/shopify-accessibility.json
+            test-results/chat-*.png
+            test-results/chat-accessibility.json
+            test-results/provider-models.png
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Show download links
+        shell: pwsh
+        env:
+          HUB_PORTABLE_URL: ${{ steps.portable.outputs.artifact-url }}
+          HUB_INSTALLER_URL: ${{ steps.installer.outputs.artifact-url }}
+        run: |
+          @"
+          ## The Hub for Windows
+          Sign into GitHub in your browser to download these files.
+
+          - [Portable application ZIP]($env:HUB_PORTABLE_URL): Extract All, open The Hub, and run The Hub.exe.
+          - [Installer ZIP]($env:HUB_INSTALLER_URL): Extract All and run The Hub Setup.
+
+          Downloads remain available for 90 days. These are unsigned test builds.
+          "@ >> $env:GITHUB_STEP_SUMMARY

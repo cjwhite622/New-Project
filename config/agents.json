@@ -1,0 +1,396 @@
+[
+  {
+    "id": "research",
+    "name": "Offer researcher",
+    "department": "commerce",
+    "jobDescription": "Find offers with demand and defensible margins.",
+    "mission": "Find offers with demand and defensible margins.",
+    "tiers": [
+      1,
+      2
+    ],
+    "tools": [
+      "research.read"
+    ],
+    "triggers": [
+      "opportunity.requested"
+    ],
+    "escalation": "Novel opportunities and unsupported claims",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Qualified opportunities",
+      "Net margin"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "competitor",
+    "name": "Competitor intelligence",
+    "department": "commerce",
+    "jobDescription": "Track relevant competitors and explain their advantages.",
+    "mission": "Track relevant competitors and explain their advantages.",
+    "tiers": [
+      0,
+      1
+    ],
+    "tools": [
+      "research.read"
+    ],
+    "triggers": [
+      "weekly.research"
+    ],
+    "escalation": "Unverified market signals",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Competitors tracked",
+      "Actionable findings"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "operations",
+    "name": "Operations",
+    "department": "commerce",
+    "jobDescription": "Deliver each approved offer through its business playbook.",
+    "mission": "Deliver each approved offer through its business playbook.",
+    "tiers": [
+      0,
+      1
+    ],
+    "tools": [
+      "offers.draft",
+      "orders.read"
+    ],
+    "triggers": [
+      "offer.approved",
+      "order.paid"
+    ],
+    "escalation": "New suppliers, delivery exceptions, material price changes",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Fulfillment time",
+      "Delivery failures"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "support",
+    "name": "Customer service",
+    "department": "commerce",
+    "jobDescription": "Resolve routine questions using approved policies.",
+    "mission": "Resolve routine questions using approved policies.",
+    "tiers": [
+      1,
+      2
+    ],
+    "tools": [
+      "support.draft"
+    ],
+    "triggers": [
+      "customer.message"
+    ],
+    "escalation": "Legal threats, chargebacks, safety, two failed attempts, large refunds",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Resolution rate",
+      "Customer sentiment"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "social-research",
+    "name": "Social researcher",
+    "department": "content",
+    "jobDescription": "Find repeatable formats that match the brand.",
+    "mission": "Find repeatable formats that match the brand.",
+    "tiers": [
+      1
+    ],
+    "tools": [
+      "research.read"
+    ],
+    "triggers": [
+      "weekly.research"
+    ],
+    "escalation": "Unlicensed media or uncertain claims",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Formats evaluated",
+      "Research freshness"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "strategist",
+    "name": "Content strategist",
+    "department": "content",
+    "jobDescription": "Turn business goals into a coherent content calendar.",
+    "mission": "Turn business goals into a coherent content calendar.",
+    "tiers": [
+      1,
+      2
+    ],
+    "tools": [
+      "content.draft"
+    ],
+    "triggers": [
+      "content.requested",
+      "launch.approved"
+    ],
+    "escalation": "Flagship content and changes to brand voice",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Drafts approved",
+      "Attributed traffic"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "video",
+    "name": "Video producer",
+    "department": "content",
+    "jobDescription": "Create inexpensive previews before approved final renders.",
+    "mission": "Create inexpensive previews before approved final renders.",
+    "tiers": [
+      0,
+      1
+    ],
+    "tools": [
+      "media.draft"
+    ],
+    "triggers": [
+      "script.approved"
+    ],
+    "escalation": "Final render cost or rights concerns",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Cost per draft",
+      "Review acceptance"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "publishing",
+    "name": "Publishing",
+    "department": "content",
+    "jobDescription": "Publish only approved payloads through connected official APIs.",
+    "mission": "Publish only approved payloads through connected official APIs.",
+    "tiers": [
+      0
+    ],
+    "tools": [
+      "content.publish"
+    ],
+    "triggers": [
+      "publication.approved"
+    ],
+    "escalation": "Every new public action until autonomy is granted",
+    "tokenBudget": 100000,
+    "kpis": [
+      "On-time posts",
+      "Publish errors"
+    ],
+    "readiness": "connection_required"
+  },
+  {
+    "id": "community",
+    "name": "Community manager",
+    "department": "content",
+    "jobDescription": "Support the audience and route sales and support issues.",
+    "mission": "Support the audience and route sales and support issues.",
+    "tiers": [
+      1,
+      2
+    ],
+    "tools": [
+      "community.draft"
+    ],
+    "triggers": [
+      "comment.received"
+    ],
+    "escalation": "PR, legal, harassment and sponsorship inquiries",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Response time",
+      "Qualified referrals"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "monetization",
+    "name": "Monetization",
+    "department": "content",
+    "jobDescription": "Evaluate eligible account monetization opportunities.",
+    "mission": "Evaluate eligible account monetization opportunities.",
+    "tiers": [
+      1
+    ],
+    "tools": [
+      "research.read",
+      "deals.draft"
+    ],
+    "triggers": [
+      "weekly.monetization"
+    ],
+    "escalation": "Sponsorships and new agreements",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Attributed social income",
+      "Program eligibility"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "bookkeeper",
+    "name": "Bookkeeper",
+    "department": "finance",
+    "jobDescription": "Record income and costs with source evidence.",
+    "mission": "Record income and costs with source evidence.",
+    "tiers": [
+      0,
+      1
+    ],
+    "tools": [
+      "finance.read",
+      "finance.record"
+    ],
+    "triggers": [
+      "ledger.recorded",
+      "daily.close"
+    ],
+    "escalation": "Budget breaches and unreconciled records",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Reconciliation coverage",
+      "Ledger accuracy"
+    ],
+    "readiness": "available"
+  },
+  {
+    "id": "tax",
+    "name": "Tax reserve",
+    "department": "finance",
+    "jobDescription": "Calculate an explicit provisional reserve on recorded profit.",
+    "mission": "Calculate an explicit provisional reserve on recorded profit.",
+    "tiers": [
+      0,
+      1,
+      2
+    ],
+    "tools": [
+      "finance.read"
+    ],
+    "triggers": [
+      "daily.close"
+    ],
+    "escalation": "Tax rule changes require professional confirmation",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Reserve coverage",
+      "Unreviewed obligations"
+    ],
+    "readiness": "available"
+  },
+  {
+    "id": "portfolio",
+    "name": "Portfolio manager",
+    "department": "finance",
+    "jobDescription": "Propose allocations only within explicitly approved rules.",
+    "mission": "Propose allocations only within explicitly approved rules.",
+    "tiers": [
+      2
+    ],
+    "tools": [
+      "finance.read",
+      "investments.propose"
+    ],
+    "triggers": [
+      "surplus.available"
+    ],
+    "escalation": "Every investment and high-risk opt-in",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Allocation drift",
+      "Total risk exposure"
+    ],
+    "readiness": "drafts"
+  },
+  {
+    "id": "manager",
+    "name": "Manager",
+    "department": "management",
+    "jobDescription": "Coordinate the team and bring clear decisions to the owner.",
+    "mission": "Coordinate the team and bring clear decisions to the owner.",
+    "tiers": [
+      0,
+      2
+    ],
+    "tools": [
+      "business.read",
+      "approvals.propose"
+    ],
+    "triggers": [
+      "owner.message",
+      "agent.completed",
+      "daily.close"
+    ],
+    "escalation": "Public output, budget exceptions and novel decisions",
+    "tokenBudget": 200000,
+    "kpis": [
+      "Approval burden",
+      "Goal progress"
+    ],
+    "readiness": "available"
+  },
+  {
+    "id": "guardian",
+    "name": "Guardian",
+    "department": "guardian",
+    "jobDescription": "Block unsafe actions and inspect permissions, budgets and data.",
+    "mission": "Block unsafe actions and inspect permissions, budgets and data.",
+    "tiers": [
+      0,
+      2
+    ],
+    "tools": [
+      "audit.read",
+      "actions.veto"
+    ],
+    "triggers": [
+      "action.proposed",
+      "system.check"
+    ],
+    "escalation": "Uncertain compliance or security always blocks",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Blocked risks",
+      "Audit integrity"
+    ],
+    "readiness": "available"
+  },
+  {
+    "id": "life-coach",
+    "name": "Life Coach",
+    "department": "personal",
+    "jobDescription": "Help with life goals in a private space.",
+    "mission": "Help with life goals in a private space.",
+    "tiers": [
+      1,
+      2
+    ],
+    "tools": [
+      "personal.read",
+      "personal.write"
+    ],
+    "triggers": [
+      "personal.check-in"
+    ],
+    "escalation": "Sensitive personal topics and external appointments",
+    "tokenBudget": 100000,
+    "kpis": [
+      "Owner-defined habits",
+      "Check-in preference"
+    ],
+    "readiness": "connection_required"
+  }
+]
