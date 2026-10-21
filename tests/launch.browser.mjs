@@ -1,0 +1,66 @@
+import assert from 'node:assert/strict';
+import {mkdir} from 'node:fs/promises';
+import {chromium} from 'playwright-core';
+import AxeBuilder from '@axe-core/playwright';
+import {fixture,profile} from './helpers.mjs';
+import {createApp} from '../server/app.mjs';
+
+const requests=[];let releaseFirst;
+const firstReady=new Promise(resolve=>{releaseFirst=resolve;});
+const f=fixture({fetchImpl:async(url,options)=>{
+  requests.push(JSON.parse(options.body));
+  const count=requests.length;if(count===1)await firstReady;
+  return new Response(JSON.stringify({output:[{content:[{type:'output_text',text:`Launch artifact ${count}: practical balcony gardening draft.`}]}],status:'completed',usage:{input_tokens:100,output_tokens:30}}));
+}});
+f.hub.saveProfile(profile);f.hub.saveProvider('openai',{enabled:true,key:'fixture-launch-secret'});
+const server=createApp(f.hub,{token:'fixture-session'}).listen(0,'127.0.0.1');
+await new Promise(resolve=>server.once('listening',resolve));
+const base=`http://127.0.0.1:${server.address().port}`;let browser;
+try{
+  browser=await chromium.launch({executablePath:process.env.HUB_CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+  const context=await browser.newContext({viewport:{width:1440,height:1050}});const page=await context.newPage();
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(base+'/#session=fixture-session');await page.getByRole('button',{name:'Launch',exact:true}).click();
+  assert.equal(await page.getByLabel('First offer format').inputValue(),'');assert.equal(await page.getByLabel('Content preference').inputValue(),'');
+  assert.equal(await page.getByLabel('What change will the offer help them make?').inputValue(),profile.offer);
+  assert.equal(await page.getByRole('button',{name:'Prepare launch drafts',exact:true}).isDisabled(),true);
+  await page.getByLabel('Who is it for?').fill('Apartment gardeners');
+  await page.getByLabel('What change will the offer help them make?').fill('Grow herbs on a small balcony');
+  await page.getByLabel('First offer format').selectOption('toolkit');await page.getByLabel('Content preference').selectOption('text');
+  await page.getByRole('button',{name:'Save direction',exact:true}).click();await page.getByText('Saved direction v1',{exact:false}).waitFor();
+  assert.equal(f.hub.jobs().length,0);assert.equal(requests.length,0);
+  let deliveries=0;
+  await page.route('**/api/launch/drafts',async route=>{
+    deliveries++;const response=await route.fetch();
+    if(deliveries===1)await route.abort('failed');else await route.fulfill({response});
+  });
+  await page.getByRole('button',{name:'Prepare launch drafts',exact:true}).click();
+  await page.getByRole('button',{name:'Retry draft request',exact:true}).waitFor();assert.equal(f.hub.jobs().length,3);
+  await page.getByRole('button',{name:'Retry draft request',exact:true}).click();
+  await page.getByRole('button',{name:'Prepare fresh drafts',exact:true}).waitFor();assert.equal(f.hub.jobs().length,3);assert.equal(deliveries,2);
+  releaseFirst();
+  await page.locator('.launch-stages .badge').filter({hasText:'completed'}).nth(2).waitFor();
+  assert.equal(requests.length,3);assert.match(requests[1].instructions,/Launch artifact 1/);assert.match(requests[2].instructions,/Launch artifact 2/);
+  await page.locator('.launch-stages li').first().getByRole('button',{name:'View draft'}).click();
+  await page.getByRole('dialog').getByText('Launch artifact 1: practical balcony gardening draft.',{exact:true}).waitFor();
+  await page.getByRole('button',{name:'Close',exact:true}).click();
+  const accessibility=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();assert.deepEqual(accessibility.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);
+  await mkdir('test-results',{recursive:true});await page.screenshot({path:'test-results/launch-workspace.png',fullPage:true});
+  await page.getByRole('button',{name:'Send pack to Approvals',exact:true}).click();await page.getByRole('heading',{name:'Review launch materials',exact:true}).waitFor();
+  for(let i=1;i<=3;i++)assert.ok((await page.locator('.approval-copy pre').textContent()).includes('Launch artifact '+i));
+  await page.getByRole('button',{name:'Approve',exact:true}).click();await page.getByRole('button',{name:/^Decided/}).click();
+  await page.getByText('Approved for this version.',{exact:false}).waitFor();assert.equal(f.hub.approvals()[0].execution,'connection_required');assert.equal(requests.length,3);
+  await page.reload();await page.getByRole('button',{name:'Launch',exact:true}).click();await page.getByText('Saved direction v1',{exact:false}).waitFor();
+  assert.equal(await page.getByLabel('Who is it for?').inputValue(),'Apartment gardeners');assert.equal(await page.locator('.launch-stages .badge').filter({hasText:'completed'}).count(),3);
+  await page.getByLabel('What change will the offer help them make?').fill('Grow herbs with a revised weekly routine');
+  assert.equal(await page.getByRole('button',{name:'Prepare fresh drafts',exact:true}).isDisabled(),true);
+  await page.getByRole('button',{name:'Save direction',exact:true}).click();await page.getByText('This pack uses an earlier direction',{exact:false}).waitFor();
+  assert.equal(f.hub.jobs().length,3);assert.equal(f.hub.approvals().length,1);assert.equal(requests.length,3);
+  await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  const mobileAccessibility=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();assert.deepEqual(mobileAccessibility.violations.map(v=>v.id),[]);
+  await page.screenshot({path:'test-results/launch-mobile.png',fullPage:true});assert.deepEqual(errors,[]);
+  assert.ok(!(await page.content()).includes('fixture-launch-secret'));
+  process.stdout.write('Launch workspace passed: explicit direction, lost-response recovery without duplicate jobs, three agent handoffs, exact approval pack, gated approval, persistence, outdated-pack detection, accessibility and mobile layout. Controlled provider responses only.\n');
+}finally{
+  releaseFirst();if(browser)await browser.close();await f.hub.drain();await new Promise(resolve=>server.close(resolve));f.close();
+}

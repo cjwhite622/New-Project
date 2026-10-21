@@ -1,12 +1,12 @@
 # The Hub
 
-A local-first desktop workspace for a business and its AI team. This first release implements the foundation and money-tracking workflows from the attached vision. It starts with a resumable interview and keeps the human in control of decisions, budgets and private information.
+A local-first desktop workspace for a business and its AI team. This release implements the foundation, money tracking and a private launch-drafting workflow. It starts with a resumable interview and keeps the human in control of direction, decisions, budgets and private information.
 
 ## Get started
 
 Downloadable Windows builds are available from the [Windows build workflow](https://github.com/cjwhite622/New-Project/actions/workflows/windows-build.yml). Sign into GitHub, open a successful run, and download **The-Hub-Windows-x64** under Artifacts. Choose **Extract All**, open the **The Hub** folder, and run **The Hub.exe**. This browser download transfers the application to your PC; cloud workspace paths in chat may only open a file viewer. GitHub keeps these build downloads for 90 days.
 
-For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.2.exe**. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; broader Windows 10/11 compatibility checks remain outstanding.
+For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.3.exe**. Close any older copy before installing. Existing workspaces and saved provider settings are preserved. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; broader Windows 10/11 compatibility checks remain outstanding.
 
 If setup does not open, use the portable download described above. Keep the entire extracted folder together. **Start The Hub.cmd** records Windows/CPU information, the exit code and safe startup stages. It always displays its report after the app exits. This diagnostic release preserves owner data. A download link that does nothing has not transferred the app to your PC; open the HTTPS GitHub download in Edge or Chrome and sign in if asked.
 
@@ -24,6 +24,8 @@ Open `http://localhost:5173`. Or run `npm run build` followed by `npm run server
 - Resumable interview, owner confirmation, six business playbooks and sixteen agent definitions.
 - Persistent jobs and structured events, local daily brief, budget review, provisional tax estimate and Guardian system inspection.
 - Private cloud-assisted drafts and ideas through OpenAI, Anthropic or Kimi/Moonshot developer APIs. Keys, enabled models and token rates are editable in the app. Kimi defaults to K2.6; its provider card can retrieve available model names and help replace retired K2.5 settings. Choose an account with appropriate model access. Consumer chat subscriptions do not include API billing.
+- Launch workspace: explicitly choose an audience, outcome, offer format and content preference. One request prepares an offer brief, starter asset, and landing-page copy with three welcome emails. Three agents pass completed drafts to one another, and the exact pack goes to the existing Approvals queue. Nothing publishes or sends on approval.
+- Business prompts now include confirmed owner time, experience and spending limits. The owner supplies direction and reviews drafts; unavailable operational actions are marked as connection dependencies. These are model instructions, not a guarantee of output accuracy or measured owner time.
 - Local exact-match caching, Anthropic prompt-cache hints, bounded output, usage-based cost estimates, budget reservations, tier downgrade and per-agent token limits. Unknown paid-call outcomes require a billing check and explicit reconciliation.
 - Versioned approval cards with approve, deny and edit. Decisions never pretend to execute unavailable integrations.
 - Monthly P&L, transaction entry, atomic CSV preview/import, duplicate protection, source attribution, provisional tax reserve, API costs and owner review-time records.
@@ -33,9 +35,9 @@ Open `http://localhost:5173`. Or run `npm run build` followed by `npm run server
 
 ## What still needs real-world work
 
-The app does not currently operate a store, place supplier orders, publish social posts, generate finished videos, transfer money or execute investments. These require tested official API adapters and owner account authorization. Social analytics, automatic daily scheduling/batching, external webhooks, autonomous workflows, automatic Life Coach check-ins, local Ollama inference and earned public-action autonomy are later gates.
+The app does not currently operate a store, place supplier orders, publish landing pages or social posts, capture signups, send emails, book calls, generate finished videos, transfer money or execute investments. These require tested official API adapters and owner account authorization. Social analytics, automatic daily scheduling, external webhooks, unattended business operation, automatic Life Coach check-ins, local Ollama inference and earned public-action autonomy are later gates.
 
-No provider key was provisioned or live model call charged during this build. Provider contracts are tested with controlled responses. Financial records begin empty. Manual and CSV income remain unverified; provider costs use configurable rates and conservative rounding. No real-income or consistent-profit claim has been established.
+Automated provider contracts are tested with controlled responses and no real keys or charges. Separately, the owner reported a successful live Kimi task on their PC after updating both model settings. Financial records begin empty. Manual and CSV income remain unverified; provider costs use configurable rates and conservative rounding. No real-income or consistent-profit claim has been established.
 
 The app supports USD, GBP, EUR, CAD and AUD ledgers. Budget limits apply to configured usage estimates. Use provider account-level limits for invoice enforcement. Cloud requests currently require a USD owner profile because provider rates are USD and no exchange-rate policy is configured. Currency locks once finance or usage records exist.
 
@@ -45,6 +47,8 @@ The app supports USD, GBP, EUR, CAD and AUD ledgers. Budget limits apply to conf
 npm test
 npm run build
 npm run test:browser
+npm run test:providers:browser
+npm run test:launch:browser
 npm run desktop
 npm run package:win
 npm run package:portable

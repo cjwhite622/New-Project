@@ -44,6 +44,9 @@ export function createApp(hub,{token,development=false}){
   get('/brand',()=>({content:hub.store.get('brandBible','Use clear, accurate language. No unsupported claims. Be useful and specific.')}));
   post('/brand',req=>{hub.requireOwner();const value=parse(z.object({content:text.max(20000)}),req.body);hub.store.set('brandBible',value.content);hub.store.log('owner','brand.updated');return value;});
   post('/jobs',req=>{const job=hub.enqueue(req.body);void hub.drain();return job;});
+  post('/launch/brief',req=>hub.saveLaunchBrief(req.body));
+  post('/launch/drafts',req=>{const batch=hub.prepareLaunchDrafts(req.body);void hub.drain();return batch;});
+  post('/launch/review',req=>hub.reviewLaunchPack(req.body));
   get('/events',()=>hub.events());
   get('/approvals',()=>hub.approvals());
   post('/approvals',req=>hub.propose(req.body));

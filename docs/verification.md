@@ -1,11 +1,11 @@
 # Verification record
 
-Verification updated: October 21, 2026. Desktop release: 0.1.2.
+Verification updated: October 21, 2026. Desktop release: 0.1.3.
 
 ## Verified
 
 - TypeScript checking and Vite production compilation pass.
-- All 39 domain/API/startup/provider tests pass and cover interview activation/persistence, exact-cent P&L, invalid dates/amounts, atomic CSV imports, duplicate/conflicting references, normalized money hashes, private-data exclusion, local task events, cached cloud responses, provider usage, budget reservations, concurrent work, 80/100% ceilings, pause/abort, queue resume, crash recovery, approval version/edit/replay, currency and commitment guards, incomplete output, audit tamper detection and business backup recovery. Startup regressions cover missing GUI console handles, server import without stderr, safe diagnostic fallback/privacy, and workspace closure when startup or draining fails.
+- All 50 domain/API/startup/provider/launch tests pass and cover interview activation/persistence, exact-cent P&L, invalid dates/amounts, atomic CSV imports, duplicate/conflicting references, normalized money hashes, private-data exclusion, local task events, cached cloud responses, provider usage, budget reservations, concurrent work, 80/100% ceilings, pause/abort, queue resume, crash recovery, approval version/edit/replay, currency and commitment guards, incomplete output, audit tamper detection and business backup recovery. Startup regressions cover missing GUI console handles, server import without stderr, safe diagnostic fallback/privacy, and workspace closure when startup or draining fails.
 - Controlled provider-response tests exercise request/usage behavior without spending or provisioned keys. They are not live authentication tests.
 - Chromium end-to-end completes the eleven-step interview, creates a local brief, records income, imports an expense, saves/reloads private notes, pauses/resumes, edits owner settings, blocks unconfigured cloud work, edits/approves a draft, checks business-state privacy, and checks the mobile layout. Lost POST responses are simulated to verify that retries preserve one ledger entry and one task.
 - Automated WCAG A/AA scans of first-run onboarding and the overview report no violations in the tested state.
@@ -15,6 +15,8 @@ Verification updated: October 21, 2026. Desktop release: 0.1.2.
 - The Windows diagnostic batch launcher was run under Wine with a zero-exit executable fixture. It prints the report, includes startup stages and reaches its pause after exit code zero. Portable ZIP CRCs pass, its executable/ASAR match the packaged Windows files, and the source ZIP matches every included workspace file.
 - Seven provider regressions cover the current Kimi model/rates and request format, confirmed model-rejection accounting/privacy, ambiguous HTTP outcomes, authenticated read-only model discovery, missing-key rejection, model-family parameters, and documented authentication/permission rejections. The initial regression run reproduced the retired model default, misleading reservation state, missing discovery endpoint and incompatible model parameters on 0.1.1. All seven checks now pass.
 - A focused Chromium workflow reproduces a structured Kimi 404, checks the released reservation, retrieves model names without generation, explicitly changes both models/rates, saves the settings, completes a draft and verifies the provider badge. The tested settings view passes automated WCAG A/AA checks and mobile width checks. These responses are controlled fixtures; no real key or provider charge is used.
+- Eleven new launch/context/API regressions verify the confirmed time/budget allowlist and private-data boundary, cache invalidation when constraints change, validated/versioned direction, atomic and replay-safe three-job batches, persistence, agent availability before queueing and dispatch, prerequisite handoff, one exact approval pack, connection-gated approval, outdated-work blocking, unknown-billing holds/reconciliation, oversized-pack rejection, route authentication/origin checks and protection against forged public workflow links. The 80% downgrade fixture now leaves sufficient headroom for the full business context, while retaining its threshold and exhaustion assertions.
+- The focused Launch browser workflow passes explicit direction selection, a deliberately lost POST response without duplicate jobs, all three agent handoffs, draft viewing, an exact combined approval, gated approval, reload persistence and outdated-pack detection. The new page passes automated WCAG A/AA scans at desktop and mobile widths, with no page errors or horizontal mobile overflow. All three browser workflows pass against the 0.1.3 production UI using controlled model responses.
 - [Native Windows 0.1.2 build 39592903189](https://github.com/cjwhite622/New-Project/actions/runs/39592903189) passes all 39 tests, compiles the NSIS installer, and opens the source, packaged and installed desktop GUI on a disposable Windows Server 2025 runner. All three GUI checks save the first interview answer, reload it, verify renderer isolation and inspect the safe startup log. The installer check runs silent installation, same-version reinstall and uninstall; installed executable/ASAR hashes match the packaged application, uninstall removes the application directory, and both workspace SQLite files retain their exact hashes after reinstall and uninstall. Screenshots, safe startup logs and the lifecycle result are uploaded as test evidence. Portable and installer downloads are uploaded successfully. Tested implementation commit: `9ae4ec2760b483cb6f27de5e4cdc471ecc0fca05`.
 
 ## Build and compatibility limits
@@ -37,6 +39,8 @@ No ecommerce account, bank, supplier, broker or social account was accessed. Aut
 npm test
 npm run build
 npm run test:browser
+npm run test:providers:browser
+npm run test:launch:browser
 npm audit --omit=dev --audit-level=high
 npm run package:win
 ```

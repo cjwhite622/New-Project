@@ -5,6 +5,7 @@ import { createFinance } from './finance.mjs';
 import { DEFAULT_PROVIDERS, memoryVault, listMoonshotModels } from './providers.mjs';
 import { profileSchema, HubError, parse, money, text } from './validation.mjs';
 import { createOrchestrator } from './orchestrator.mjs';
+import { createLaunchWorkspace } from './launch.mjs';
 
 const AGENTS=JSON.parse(readFileSync(new URL('../config/agents.json',import.meta.url),'utf8'));
 const PLAYBOOKS=JSON.parse(readFileSync(new URL('../config/playbooks.json',import.meta.url),'utf8'));
@@ -89,9 +90,10 @@ export function createHub({dataDir,vault=memoryVault(),fetchImpl=fetch}) {
         {id:'income',label:'Verified income',state:'attention',detail:'No independently verified settlement data. Recorded revenue is not income proof.'},
       ];
     },
-    state(){return {profile:profile(),interview:get('interview',{step:0,answers:{}}),paused:get('paused'),agents:agents(),playbooks:PLAYBOOKS,providers:providers(),rules:get('rules'),finance:finance.finance(),jobs:hub.jobs(),approvals:hub.approvals(),audit:store.audit(12),systemCheck:hub.systemCheck(),phase:'Phase 0 + 1',version:VERSION,vaultPersistent:Boolean(vault.persistent),unknownUsage:hub.unknownUsage()};},
+    state(){return {profile:profile(),interview:get('interview',{step:0,answers:{}}),paused:get('paused'),agents:agents(),playbooks:PLAYBOOKS,providers:providers(),rules:get('rules'),finance:finance.finance(),jobs:hub.jobs(),approvals:hub.approvals(),launch:hub.launchState(),audit:store.audit(12),systemCheck:hub.systemCheck(),phase:'Phase 0 + 1',version:VERSION,vaultPersistent:Boolean(vault.persistent),unknownUsage:hub.unknownUsage()};},
     close(){hub.stop();store.close();},
   };
   Object.assign(hub,createOrchestrator(hub));
+  Object.assign(hub,createLaunchWorkspace(hub));
   return hub;
 }

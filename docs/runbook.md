@@ -2,7 +2,7 @@
 
 ## Windows installation
 
-Use a 64-bit Windows 10/11 computer. Run `The Hub Setup 0.1.2.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Open The Hub and finish the Manager conversation. Confirm the owner profile before agents activate.
+Use a 64-bit Windows 10/11 computer. Close any older copy and run `The Hub Setup 0.1.3.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Existing owner data and saved provider settings are preserved. Open The Hub and finish the Manager conversation if this is a new workspace. Confirm the owner profile before agents activate.
 
 The installer is unsigned. The Windows workflow compiles it with native NSIS and runs desktop and installation checks on a disposable Windows Server 2025 runner. Source and packaged GUI launches have passed there. Check the [verification record](verification.md) for the installation results and tested commit. The owner confirmed version 0.1.1 launches and completes the interview on their Windows PC. The owner also reported a completed live Manager task after correcting both Kimi model settings to K2.6. The automated model-discovery and recovery tests use controlled responses; provider invoices remain the authority for charges.
 
@@ -15,8 +15,18 @@ For a silent launch, use the portable ZIP and open **Start The Hub.cmd** from it
 3. Open Finance. Record existing costs and income or import a CSV. These records remain unverified.
 4. Write the Brand Bible with mission, voice and prohibited claims.
 5. Connect a developer API key under Settings → Model providers when ready. Verify your model access and token prices. Saved keys are not marked tested until a model request succeeds.
-6. Ask the Manager to explore an idea or ask the Content Strategist to draft a post. Cloud calls require a USD profile in this release.
-7. Review the result in Task history. Send a public draft to Approvals, inspect/edit its exact content, then decide. Approval records permission; it does not publish anything.
+6. Open Launch. Enter the audience and desired outcome, explicitly choose the offer format and content preference, then **Save direction**. This is local and free.
+7. Click **Prepare launch drafts** for up to three budgeted AI requests. Research, the Content Strategist and the Manager prepare the offer brief, starter asset, and landing-page copy with three welcome emails. Cloud calls require a USD profile in this release.
+8. Read **View draft** for each stage, then **Send pack to Approvals**. Inspect/edit the exact pack in the existing queue and decide. Approval records review; it does not publish a page, send email or accept payment.
+9. For other work, ask the Manager to explore an idea or the Content Strategist to draft a post. Results remain in Task history and can also enter the same approval queue.
+
+## Launch draft recovery
+
+If the draft request loses its response, **Retry draft request** checks the same operation; it does not create a second batch. There is no automatic retry of a paid model request. **View issue** explains blocked or failed stages. If billing is uncertain, check the provider's dashboard and reconcile it in Finance before requesting another pack. If an agent is disabled, re-enable it in Settings before preparing fresh drafts. All three jobs are created together or none are created.
+
+Changing the saved direction or owner profile marks the old pack outdated. Queued stages stop before dispatch, and a completed outdated pack cannot be submitted as a new review. A request already received by the provider may still be charged. **Prepare fresh drafts** is a new explicit, budgeted request after prior work has finished and uncertain billing has been reconciled. Prior jobs and approvals remain in their history.
+
+The Manager receives your confirmed business time and budget limits. Personal journal data and provider keys are excluded. Review time suggestions are model guidance; record actual time in Finance. Draft prices, demand estimates and service recommendations still need evidence before public use. Publishing, email, booking, payment and delivery connections remain outstanding engineering work.
 
 ## Kimi model-not-found recovery
 

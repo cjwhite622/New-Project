@@ -30,6 +30,18 @@ jobs:
         run: npm test
       - name: Build Windows installer
         run: npm run package:win
+      - name: Check browser workflows on Windows
+        shell: pwsh
+        run: |
+          $chrome = @("$env:ProgramFiles\Google\Chrome\Application\chrome.exe", "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $chrome) { throw "The hosted runner's Chrome installation was not found." }
+          $env:HUB_CHROMIUM_PATH = $chrome
+          npm run test:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:providers:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:launch:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Check source desktop on Windows
         run: npm run test:desktop:windows
       - name: Check packaged desktop on Windows
@@ -61,7 +73,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Windows-desktop-test-evidence
-          path: test-results/windows-*
+          path: |
+            test-results/windows-*
+            test-results/launch-*.png
+            test-results/provider-models.png
           if-no-files-found: ignore
           retention-days: 14
       - name: Show download links

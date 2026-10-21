@@ -26,6 +26,8 @@ flowchart LR
 | `server/hub.mjs` | Owner profile, agent configuration, settings, personal service, reports |
 | `server/finance.mjs` | Integer-cent ledger, CSV parsing, P&L and tax estimate |
 | `server/orchestrator.mjs` | Queue, routing, budget reservation, pause, recovery and approval versions |
+| `server/business-context.mjs` | Explicit business-field allowlist and confirmed owner constraints in cloud prompts |
+| `server/launch.mjs` | Versioned launch direction, atomic three-job batches, dependency checks and exact review packs |
 | `server/providers.mjs` | Provider request/response contracts, token pricing, session key vault |
 | `server/app.mjs` | Authenticated HTTP interface, origin/host checks and exports |
 | `electron/main.cjs` | Desktop lifecycle, OS-encrypted key storage and isolated renderer |
@@ -36,13 +38,21 @@ flowchart LR
 
 The owner confirms the interview before tasks or provider connections are accepted. A unique request ID creates a queued job and event. The worker runs jobs one at a time, so budget checks and reservations cannot race. A deterministic task returns local calculations with zero model tokens. A cloud task chooses the least expensive enabled, connected provider for the requested tier.
 
-The cloud path uses the agent mission, selected business fields, Brand Bible and task. It has no tool calls, credentials in prompts, personal journal access, or execution permissions. An exact cache match returns without a paid call. Otherwise, the worker reserves a conservative input-byte/output-token cost estimate and agent token allowance inside a database transaction. It checks the monthly API, operating and hard limits before dispatch.
+The cloud path uses the agent mission, an explicit allowlist of business interview fields, Brand Bible and task. The allowlist includes confirmed weekly hours, experience, currency, income target, startup/operating/API budgets and the hard spending cap. It does not spread arbitrary profile properties. Prompts assign operational work to agents, reserve the owner's time for ideas and review, and identify unavailable connections. Model instructions do not enforce actual owner time or output correctness. The worker has no tool calls, credentials in prompts, personal journal access, or execution permissions. An exact cache match returns without a paid call; changed business constraints invalidate that match. Otherwise, the worker reserves a conservative input-byte/output-token cost estimate and agent token allowance inside a database transaction. It checks the monthly API, operating and hard limits before dispatch.
 
 Known usage settles the reservation and records an API expense estimate. Anthropic cached input tokens count toward usage; pricing conservatively includes cache-write overhead. Incomplete/truncated responses settle known usage, fail visibly and never enter the completed cache. Network failures, missing usage and interruption retain the maximum reservation as unknown. The owner records the provider billing outcome in Finance to release it. The app does not retry paid requests automatically.
 
 At 80% of a token limit, a premium task downgrades to routine and informs the Manager through an event. At 100%, cloud work blocks and creates a budget review card. This release has no deterministic substitute for arbitrary writing. Local tasks remain available.
 
 Ten completed jobs of an agent/type create a distillation-candidate event. This count is not a public-action success score. Earned autonomy requires later execution adapters and an audited success track record.
+
+## Launch workspace
+
+The owner explicitly saves an audience, transformation, offer format and content preference. Optimistic versions reject stale edits; saving never generates text. A separate request atomically queues three private draft jobs: Research prepares the offer brief, the Content Strategist prepares the starter asset, and the Manager prepares landing-page copy and three welcome emails. Later stages receive only completed earlier drafts, labeled as untrusted content. An incomplete, failed or blocked prerequisite stops dependent work before provider transport.
+
+The batch, direction, job links and request replay mapping persist in the business database. Duplicate delivery of the same request returns its original batch. Another request cannot overlap active launch work or bypass an unresolved billing outcome from the previous batch. Each stage uses the existing serialized worker, budget reservations, agent enablement and pause controls. There is no automatic paid retry or scheduled launch.
+
+A saved direction or owner business change makes the current pack outdated. Queued stages block before a provider call, while an already dispatched request may still complete and incur a charge. Outdated packs cannot be submitted for review. After all three stages complete, one idempotent action copies their exact text into the central Approvals queue. Oversized packs are rejected rather than truncated. Approval remains `connection_required`; it creates no page, email, booking, checkout or delivery. Future adapters require approval of the actual external action and execution receipts.
 
 ## Approvals and recovery
 

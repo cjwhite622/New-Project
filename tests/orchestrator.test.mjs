@@ -62,11 +62,12 @@ test('zero API budget blocks calls before transport and exhausted agent budget e
 test('80 percent budget downgrades premium tasks and 100 percent pauses',async()=>{
   let model;const f=fixture({fetchImpl:async(url,options)=>{model=JSON.parse(options.body).model;return cloudResponse();}});try{
     f.hub.saveProfile(profile);f.hub.saveProvider('openai',{key:'test',enabled:true});
-    f.hub.saveAgent('manager',{tokenBudget:10000});
-    f.hub.store.db.prepare('INSERT INTO usage VALUES (?,?,?,?,?,?,?,?,?,?,?,?)').run('seed','seed','manager',new Date().toISOString().slice(0,7),8000,0,0,0,0,'settled','openai',new Date().toISOString());
+    // Leave room for the full confirmed business context at the 80% threshold.
+    f.hub.saveAgent('manager',{tokenBudget:30000});
+    f.hub.store.db.prepare('INSERT INTO usage VALUES (?,?,?,?,?,?,?,?,?,?,?,?)').run('seed','seed','manager',new Date().toISOString().slice(0,7),24000,0,0,0,0,'settled','openai',new Date().toISOString());
     f.hub.enqueue({agentId:'manager',kind:'brainstorm',prompt:'A practical growth idea',requestId:'downgrade'});
-    await f.hub.drain();assert.equal(model,'gpt-4.1-mini');
-    f.hub.saveAgent('manager',{tokenBudget:8150});
+    await f.hub.drain();assert.equal(f.hub.jobs()[0].status,'completed');assert.equal(model,'gpt-4.1-mini');assert.equal(f.hub.jobs()[0].tier,1);
+    f.hub.saveAgent('manager',{tokenBudget:24150});
     f.hub.enqueue({agentId:'manager',kind:'brainstorm',prompt:'Another idea',requestId:'exhausted'});
     await f.hub.drain();assert.equal(f.hub.jobs()[0].status,'blocked');
   }finally{f.close();}
