@@ -42,7 +42,7 @@ export function createShopifyAPI(hub){
     const secret=credentials()?.secret;if(!secret)throw new HubError('Connect Shopify in Settings first.',409);
     if(config.mode==='token')return secret;
     if(tokenCache?.version===config.version&&Date.now()<tokenCache.expiresAt-60000)return tokenCache.token;
-    const result=await jsonRequest(`https://${config.shop}/admin/oauth/access_token`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({grant_type:'client_credentials',client_id:config.clientId,client_secret:secret}),signal});
+    const result=await jsonRequest(`https://${config.shop}/admin/oauth/access_token`,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'client_credentials',client_id:config.clientId,client_secret:secret}).toString(),signal});
     if(typeof result.access_token!=='string'||!result.access_token||!Number.isFinite(result.expires_in)||result.expires_in<=0)throw new HubError('Shopify did not return a usable app token. Client credentials require an installed app and store owned by the same organization.',502);
     if(!sameConnection(config))throw new HubError('Shopify connection settings changed. Check again.',409);
     tokenCache={version:config.version,token:result.access_token,expiresAt:Date.now()+result.expires_in*1000};return tokenCache.token;

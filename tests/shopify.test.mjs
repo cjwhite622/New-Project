@@ -10,7 +10,7 @@ const complete=text=>new Response(JSON.stringify({status:'completed',output:[{co
 function scenario(options={}){
   const requests=[];let created=null;let tokens=0;
   const f=fixture({fetchImpl:async(url,init)=>{
-    const body=JSON.parse(init.body);requests.push({url,body,headers:init.headers,redirect:init.redirect});
+    const body=init.headers['content-type']==='application/x-www-form-urlencoded'?Object.fromEntries(new URLSearchParams(init.body)):JSON.parse(init.body);requests.push({url,body,headers:init.headers,redirect:init.redirect});
     if(url.endsWith('/admin/oauth/access_token')){tokens++;if(options.token)await options.token(tokens);return new Response(JSON.stringify({access_token:'fixture-issued-token-'+tokens,expires_in:options.expired?1:86400}));}
     if(url.includes('.myshopify.com')){
       if(body.query.includes('pageCreate')){
@@ -47,6 +47,7 @@ test('client credentials renew expiring tokens without exposing them to model pr
   const f=scenario({expired:true});try{
     await connection(f,'client_credentials');await f.hub.checkShopifyConnection();assert.equal(f.tokens(),2);
     const auth=f.requests.find(r=>r.url.endsWith('/admin/oauth/access_token'));assert.equal(auth.body.grant_type,'client_credentials');assert.equal(auth.body.client_id,'fixture-client-id');
+    assert.equal(auth.headers['content-type'],'application/x-www-form-urlencoded','Shopify documents form-encoded client-credentials grants');
     assert.doesNotMatch(JSON.stringify(f.hub.state()),/fixture-client-secret|fixture-issued-token/);
   }finally{f.close();}
 });
