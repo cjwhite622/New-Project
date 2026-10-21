@@ -1,0 +1,79 @@
+name: Windows build and download
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Build and test Windows application
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check domain and startup behavior
+        run: npm test
+      - name: Build Windows installer
+        run: npm run package:win
+      - name: Check source desktop on Windows
+        run: npm run test:desktop:windows
+      - name: Check packaged desktop on Windows
+        run: npm run test:desktop:windows
+        env:
+          HUB_DESKTOP_EXECUTABLE: release/win-unpacked/The Hub.exe
+      - name: Prepare portable application
+        run: npm run package:portable
+      - name: Upload portable download
+        id: portable
+        uses: actions/upload-artifact@v4
+        with:
+          name: The-Hub-Windows-x64
+          path: release/portable-staging/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Upload installer download
+        id: installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: The-Hub-Installer
+          path: release/The Hub Setup *.exe
+          if-no-files-found: error
+          retention-days: 90
+      - name: Upload desktop test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-desktop-test-evidence
+          path: test-results/windows-*
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Show download links
+        shell: pwsh
+        env:
+          HUB_PORTABLE_URL: ${{ steps.portable.outputs.artifact-url }}
+          HUB_INSTALLER_URL: ${{ steps.installer.outputs.artifact-url }}
+        run: |
+          @"
+          ## The Hub for Windows
+          Sign into GitHub in your browser to download these files.
+
+          - [Portable application ZIP]($env:HUB_PORTABLE_URL): Extract All, open The Hub, and run The Hub.exe.
+          - [Installer ZIP]($env:HUB_INSTALLER_URL): Extract All and run The Hub Setup.
+
+          Downloads remain available for 90 days. These are unsigned test builds.
+          "@ >> $env:GITHUB_STEP_SUMMARY

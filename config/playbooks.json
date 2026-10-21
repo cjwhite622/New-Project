@@ -1,0 +1,212 @@
+[
+  {
+    "id": "commerce",
+    "name": "E-commerce & dropshipping",
+    "description": "Research products, prepare listings and plan supplier fulfillment.",
+    "operations": "Product listings",
+    "fulfillment": "Paid order \u2192 supplier order \u2192 tracking \u2192 customer follow-up",
+    "agents": [
+      "research",
+      "competitor",
+      "operations",
+      "support",
+      "social-research",
+      "strategist",
+      "video",
+      "publishing",
+      "community",
+      "monetization",
+      "bookkeeper",
+      "tax",
+      "portfolio",
+      "manager",
+      "guardian"
+    ],
+    "duties": {
+      "research": "Research products, prepare listings and plan supplier fulfillment.",
+      "operations": "Paid order \u2192 supplier order \u2192 tracking \u2192 customer follow-up",
+      "support": "Handle questions, cancellations and escalation for product listings",
+      "strategist": "Prepare branded content that directs customers to product listings"
+    },
+    "requiredConnections": [
+      "Business platform",
+      "Payment data",
+      "Official publishing API"
+    ]
+  },
+  {
+    "id": "services",
+    "name": "Coaching & services",
+    "description": "Research a niche, package offers and plan booking and program delivery.",
+    "operations": "Booking and service pages",
+    "fulfillment": "Booking \u2192 onboarding materials \u2192 session links \u2192 follow-up",
+    "agents": [
+      "research",
+      "competitor",
+      "operations",
+      "support",
+      "social-research",
+      "strategist",
+      "video",
+      "publishing",
+      "community",
+      "monetization",
+      "bookkeeper",
+      "tax",
+      "portfolio",
+      "manager",
+      "guardian"
+    ],
+    "duties": {
+      "research": "Research a niche, package offers and plan booking and program delivery.",
+      "operations": "Booking \u2192 onboarding materials \u2192 session links \u2192 follow-up",
+      "support": "Handle questions, cancellations and escalation for booking and service pages",
+      "strategist": "Prepare branded content that directs customers to booking and service pages"
+    },
+    "requiredConnections": [
+      "Business platform",
+      "Payment data",
+      "Official publishing API"
+    ]
+  },
+  {
+    "id": "content",
+    "name": "Blogging & content",
+    "description": "Research audience needs, build an editorial plan and attribute affiliate income.",
+    "operations": "Articles and newsletter issues",
+    "fulfillment": "Subscription \u2192 welcome sequence \u2192 content delivery \u2192 retention",
+    "agents": [
+      "research",
+      "competitor",
+      "operations",
+      "support",
+      "social-research",
+      "strategist",
+      "video",
+      "publishing",
+      "community",
+      "monetization",
+      "bookkeeper",
+      "tax",
+      "portfolio",
+      "manager",
+      "guardian"
+    ],
+    "duties": {
+      "research": "Research audience needs, build an editorial plan and attribute affiliate income.",
+      "operations": "Subscription \u2192 welcome sequence \u2192 content delivery \u2192 retention",
+      "support": "Handle questions, cancellations and escalation for articles and newsletter issues",
+      "strategist": "Prepare branded content that directs customers to articles and newsletter issues"
+    },
+    "requiredConnections": [
+      "Business platform",
+      "Payment data",
+      "Official publishing API"
+    ]
+  },
+  {
+    "id": "digital",
+    "name": "Digital products & courses",
+    "description": "Validate useful products and prepare access and learning journeys.",
+    "operations": "Digital product and course pages",
+    "fulfillment": "Payment \u2192 secure access \u2192 learning materials \u2192 learner support",
+    "agents": [
+      "research",
+      "competitor",
+      "operations",
+      "support",
+      "social-research",
+      "strategist",
+      "video",
+      "publishing",
+      "community",
+      "monetization",
+      "bookkeeper",
+      "tax",
+      "portfolio",
+      "manager",
+      "guardian"
+    ],
+    "duties": {
+      "research": "Validate useful products and prepare access and learning journeys.",
+      "operations": "Payment \u2192 secure access \u2192 learning materials \u2192 learner support",
+      "support": "Handle questions, cancellations and escalation for digital product and course pages",
+      "strategist": "Prepare branded content that directs customers to digital product and course pages"
+    },
+    "requiredConnections": [
+      "Business platform",
+      "Payment data",
+      "Official publishing API"
+    ]
+  },
+  {
+    "id": "agency",
+    "name": "Marketing & agency",
+    "description": "Qualify clients, scope engagements and plan project delivery.",
+    "operations": "Service proposals",
+    "fulfillment": "Agreement \u2192 kickoff \u2192 milestones \u2192 client reporting",
+    "agents": [
+      "research",
+      "competitor",
+      "operations",
+      "support",
+      "social-research",
+      "strategist",
+      "video",
+      "publishing",
+      "community",
+      "monetization",
+      "bookkeeper",
+      "tax",
+      "portfolio",
+      "manager",
+      "guardian"
+    ],
+    "duties": {
+      "research": "Qualify clients, scope engagements and plan project delivery.",
+      "operations": "Agreement \u2192 kickoff \u2192 milestones \u2192 client reporting",
+      "support": "Handle questions, cancellations and escalation for service proposals",
+      "strategist": "Prepare branded content that directs customers to service proposals"
+    },
+    "requiredConnections": [
+      "Business platform",
+      "Payment data",
+      "Official publishing API"
+    ]
+  },
+  {
+    "id": "existing",
+    "name": "Connect an existing business",
+    "description": "Map the team onto current tools and protect what already works.",
+    "operations": "Existing offers and systems",
+    "fulfillment": "Audit current workflow \u2192 map tools \u2192 automate approved steps",
+    "agents": [
+      "research",
+      "competitor",
+      "operations",
+      "support",
+      "social-research",
+      "strategist",
+      "video",
+      "publishing",
+      "community",
+      "monetization",
+      "bookkeeper",
+      "tax",
+      "portfolio",
+      "manager",
+      "guardian"
+    ],
+    "duties": {
+      "research": "Map the team onto current tools and protect what already works.",
+      "operations": "Audit current workflow \u2192 map tools \u2192 automate approved steps",
+      "support": "Handle questions, cancellations and escalation for existing offers and systems",
+      "strategist": "Prepare branded content that directs customers to existing offers and systems"
+    },
+    "requiredConnections": [
+      "Business platform",
+      "Payment data",
+      "Official publishing API"
+    ]
+  }
+]
