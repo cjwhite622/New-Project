@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mkdir} from 'node:fs/promises';
+import {mkdir,writeFile} from 'node:fs/promises';
 import {chromium} from 'playwright-core';
 import AxeBuilder from '@axe-core/playwright';
 import {fixture,profile} from './helpers.mjs';
@@ -19,6 +19,7 @@ const base=`http://127.0.0.1:${server.address().port}`;let browser;
 try{
   browser=await chromium.launch({executablePath:process.env.HUB_CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
   const context=await browser.newContext({viewport:{width:1440,height:1050}});const page=await context.newPage();
+  await page.emulateMedia({reducedMotion:'reduce'});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'/#session=fixture-session');await page.getByRole('button',{name:'Launch',exact:true}).click();
   assert.equal(await page.getByLabel('First offer format').inputValue(),'');assert.equal(await page.getByLabel('Content preference').inputValue(),'');
@@ -44,7 +45,8 @@ try{
   await page.locator('.launch-stages li').first().getByRole('button',{name:'View draft'}).click();
   await page.getByRole('dialog').getByText('Launch artifact 1: practical balcony gardening draft.',{exact:true}).waitFor();
   await page.getByRole('button',{name:'Close',exact:true}).click();
-  const accessibility=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();assert.deepEqual(accessibility.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);
+  const findings=report=>report.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))}));
+  const accessibility=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();assert.deepEqual(findings(accessibility),[]);
   await mkdir('test-results',{recursive:true});await page.screenshot({path:'test-results/launch-workspace.png',fullPage:true});
   await page.getByRole('button',{name:'Send pack to Approvals',exact:true}).click();await page.getByRole('heading',{name:'Review launch materials',exact:true}).waitFor();
   for(let i=1;i<=3;i++)assert.ok((await page.locator('.approval-copy pre').textContent()).includes('Launch artifact '+i));
@@ -57,8 +59,10 @@ try{
   await page.getByRole('button',{name:'Save direction',exact:true}).click();await page.getByText('This pack uses an earlier direction',{exact:false}).waitFor();
   assert.equal(f.hub.jobs().length,3);assert.equal(f.hub.approvals().length,1);assert.equal(requests.length,3);
   await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-  const mobileAccessibility=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();assert.deepEqual(mobileAccessibility.violations.map(v=>v.id),[]);
-  await page.screenshot({path:'test-results/launch-mobile.png',fullPage:true});assert.deepEqual(errors,[]);
+  await page.screenshot({path:'test-results/launch-mobile.png',fullPage:true});
+  const mobileAccessibility=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();
+  await writeFile('test-results/launch-accessibility.json',JSON.stringify({desktop:findings(accessibility),mobile:findings(mobileAccessibility)},null,2));
+  assert.deepEqual(findings(mobileAccessibility),[]);assert.deepEqual(errors,[]);
   assert.ok(!(await page.content()).includes('fixture-launch-secret'));
   process.stdout.write('Launch workspace passed: explicit direction, lost-response recovery without duplicate jobs, three agent handoffs, exact approval pack, gated approval, persistence, outdated-pack detection, accessibility and mobile layout. Controlled provider responses only.\n');
 }finally{
