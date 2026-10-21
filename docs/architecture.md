@@ -27,6 +27,7 @@ flowchart LR
 | `server/finance.mjs` | Integer-cent ledger, CSV parsing, P&L and tax estimate |
 | `server/orchestrator.mjs` | Queue, routing, budget reservation, pause, recovery and approval versions |
 | `server/business-context.mjs` | Explicit business-field allowlist and confirmed owner constraints in cloud prompts |
+| `server/chat.mjs` | Persistent business conversations, bounded follow-up context, delivery IDs and exact reply review |
 | `server/launch.mjs` | Versioned launch direction, atomic three-job batches, dependency checks and exact review packs |
 | `server/shopify-api.mjs` | Fixed Shopify API/auth contracts, token renewal and read-only connection inspection |
 | `server/shopify.mjs` | Source-bound page proposals, protected action payloads, dispatch and receipt recovery |
@@ -61,6 +62,16 @@ A saved direction or owner business change makes the current pack outdated. Queu
 An approval includes who, what, why, cost, risk, expected outcome, recommendation and exact content. Its version must match the decision. Editing increments the version, returns the card to pending and invalidates earlier authorization. Guardian may veto. Budget approval never raises a limit by itself, and a publishing approval never claims content was posted.
 
 Pause persists and aborts the active provider request. Resume drains queued work. Restart marks interrupted jobs failed and exposes their retained reservations for reconciliation. Queued jobs can resume; paid jobs with unknown outcomes never replay automatically. Settings and local records remain accessible while paused.
+
+## Team chat
+
+Chat extends the existing serialized provider job path. A business document holds each conversation and ordered owner turns, with durable references to the corresponding jobs. Replies are read from jobs, avoiding a second source of truth for costs, status or output. Authenticated same-origin routes list/open conversations, send one message or copy one completed reply to Approvals. Conversation metadata is queried separately from full histories. No personal journal data enters this path.
+
+The first send atomically creates its conversation, turn, job and a hashed delivery index. Re-delivery checks the same immutable content/agent/conversation fingerprint. The internal job request uses a server-generated turn UUID and exact workflow checks, preventing public client request IDs from substituting unrelated jobs. Each conversation has one active turn. Unknown model billing holds subsequent messages until Finance reconciliation. Existing budget escalation is preserved.
+
+The model gets the current business system prompt and recent completed turns from this conversation only, up to 12 pairs / 12,000 serialized characters. Newest complete pairs are kept without slicing their text; full history remains saved. Cached responses bind this context. Chat has no execution tools. Only an explicit owner action copies an exact completed reply into one generic review card; audit titles remain generic and metadata-only.
+
+The renderer polls the selected active reply, retains immutable unconfirmed-delivery payloads, separates acknowledged sends from refresh failures, and uses safe text rendering. Sidebar navigation scrolls independently of persistent Pause/profile controls. Completed histories survive reload and restart; unsent drafts are memory-only.
 
 ## Shopify draft action
 

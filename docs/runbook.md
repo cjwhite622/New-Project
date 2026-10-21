@@ -2,7 +2,7 @@
 
 ## Windows installation
 
-Use a 64-bit Windows 10/11 computer. Close any older copy and run `The Hub Setup 0.1.4.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Existing owner data and saved provider settings are preserved. Open The Hub and finish the Manager conversation if this is a new workspace. Confirm the owner profile before agents activate.
+Use a 64-bit Windows 10/11 computer. Close any older copy and run `The Hub Setup 0.1.5.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Existing owner data and saved provider settings are preserved. Open The Hub and finish the Manager conversation if this is a new workspace. Confirm the owner profile before agents activate.
 
 The installer is unsigned. The Windows workflow compiles it with native NSIS and runs desktop and installation checks on a disposable Windows Server 2025 runner. Source and packaged GUI launches have passed there. Check the [verification record](verification.md) for the installation results and tested commit. The owner confirmed version 0.1.1 launches and completes the interview on their Windows PC. The owner also reported a completed live Manager task after correcting both Kimi model settings to K2.6. The automated model-discovery and recovery tests use controlled responses; provider invoices remain the authority for charges.
 
@@ -19,6 +19,20 @@ For a silent launch, use the portable ZIP and open **Start The Hub.cmd** from it
 7. Click **Prepare launch drafts** for up to three budgeted AI requests. Research, the Content Strategist and the Manager prepare the offer brief, starter asset, and landing-page copy with three welcome emails. Cloud calls require a USD profile in this release.
 8. Read **View draft** for each stage, then **Send pack to Approvals**. Inspect/edit the exact pack in the existing queue and decide. Approval records review; it does not publish a page, send email or accept payment.
 9. For other work, ask the Manager to explore an idea or the Content Strategist to draft a post. Results remain in Task history and can also enter the same approval queue.
+
+## Chat with your team
+
+Version 0.1.5 adds **Chat** in the sidebar. **Ask your team** in the header or **Ctrl+K** (Cmd+K on Mac) opens it. Use your existing configured model provider; no new hosting or chat subscription is required.
+
+Choose a business agent for a new conversation, enter a message, then send. **Enter** sends; **Shift+Enter** adds a line. A conversation keeps its selected agent. Use **New conversation** to change agents; the earlier history stays saved and searchable. Drafts you have not sent remain in memory while switching conversations on the Chat page; leaving the page or restarting discards unsent drafts.
+
+Each message creates one durable, budgeted job. A completed reply shows its estimated cost and any cache hit. Reading saved messages costs no model tokens. The full sent history is saved locally, while only recent completed turns (up to 12 pairs / 12,000 serialized characters) are included in a follow-up request. Earlier messages and failed replies are not silently treated as current model memory. Your business chat never reads the separate Life Coach notes or credentials. It is part of the business backup and can contain business information; messages are sent to your connected model API for replies.
+
+If delivery loses its HTTP response, **Check message delivery** checks the same immutable operation. It does not create another paid job. Queued/running replies show their state. Unknown provider outcomes keep their cost reservation and block further messages in that conversation until billing is checked and reconciled in Finance. No provider call is automatically retried. A blocked task explains missing providers, disabled agents, pause or budgets; correct the issue, then explicitly send a message.
+
+**Send reply to Approvals** copies the exact completed answer into one review card. The card is idempotent and can be reopened. Approval records review; text in chat cannot publish, email, charge a customer or invoke the Shopify adapter. Those actions keep their separate exact approvals. Reply text is rendered as text, without executing returned HTML.
+
+The left sidebar now has its own keyboard-focusable scroll area. Navigation, system health and the workspace name can scroll while Pause/Resume and owner controls remain visible. On phones, open the navigation drawer to use the same scroll behavior.
 
 ## Launch draft recovery
 

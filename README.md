@@ -1,6 +1,6 @@
 # The Hub
 
-A local-first desktop workspace for a business and its AI team. This release implements the foundation, money tracking, private launch drafts and an approval-bound Shopify draft-page adapter. It starts with a resumable interview and keeps the human in control of direction, decisions, budgets and private information.
+A local-first desktop workspace for a business and its AI team. This release implements the foundation, money tracking, persistent team chat, private launch drafts and an approval-bound Shopify draft-page adapter. It starts with a resumable interview and keeps the human in control of direction, decisions, budgets and private information.
 
 ## Get started
 
@@ -8,7 +8,7 @@ Latest verified release: **0.1.4** — [installer ZIP](https://github.com/cjwhit
 
 Downloadable Windows builds are available from the [Windows build workflow](https://github.com/cjwhite622/New-Project/actions/workflows/windows-build.yml). Sign into GitHub, open a successful run, and download **The-Hub-Windows-x64** under Artifacts. Choose **Extract All**, open the **The Hub** folder, and run **The Hub.exe**. This browser download transfers the application to your PC; cloud workspace paths in chat may only open a file viewer. GitHub keeps these build downloads for 90 days.
 
-For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.4.exe**. Close any older copy before installing. Existing workspaces and saved provider settings are preserved. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; broader Windows 10/11 compatibility checks remain outstanding.
+For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.5.exe**. Close any older copy before installing. Existing workspaces and saved provider settings are preserved. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; broader Windows 10/11 compatibility checks remain outstanding.
 
 If setup does not open, use the portable download described above. Keep the entire extracted folder together. **Start The Hub.cmd** records Windows/CPU information, the exit code and safe startup stages. It always displays its report after the app exits. This diagnostic release preserves owner data. A download link that does nothing has not transferred the app to your PC; open the HTTPS GitHub download in Edge or Chrome and sign in if asked.
 
@@ -26,6 +26,7 @@ Open `http://localhost:5173`. Or run `npm run build` followed by `npm run server
 - Resumable interview, owner confirmation, six business playbooks and sixteen agent definitions.
 - Persistent jobs and structured events, local daily brief, budget review, provisional tax estimate and Guardian system inspection.
 - Private cloud-assisted drafts and ideas through OpenAI, Anthropic or Kimi/Moonshot developer APIs. Keys, enabled models and token rates are editable in the app. Kimi defaults to K2.6; its provider card can retrieve available model names and help replace retired K2.5 settings. Choose an account with appropriate model access. Consumer chat subscriptions do not include API billing.
+- Team chat: saved conversations with your Manager or another business agent, follow-up context, search, copy and exact reply review. Messages use the same provider budgets and billing recovery as other jobs. The sidebar scrolls independently, keeping Pause and owner settings visible on short displays.
 - Launch workspace: explicitly choose an audience, outcome, offer format and content preference. One request prepares an offer brief, starter asset, and landing-page copy with three welcome emails. Three agents pass completed drafts to one another, and the exact pack goes to the existing Approvals queue. Pack approval records review without publishing or sending.
 - Shopify Business connection: check your store and scopes, prepare an editable private page preview from the approved pack, then review an exact store action. Approving that action queues one unpublished page creation and records its page ID. Unknown outcomes stay held for read-only recovery; there is no automatic write retry. Credentials stay in the desktop vault.
 - Business prompts now include confirmed owner time, experience and spending limits. The owner supplies direction and reviews drafts; unavailable operational actions are marked as connection dependencies. These are model instructions, not a guarantee of output accuracy or measured owner time.
@@ -53,6 +54,7 @@ npm run test:browser
 npm run test:providers:browser
 npm run test:launch:browser
 npm run test:shopify:browser
+npm run test:chat:browser
 npm run desktop
 npm run package:win
 npm run package:portable

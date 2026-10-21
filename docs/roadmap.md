@@ -4,7 +4,7 @@ The attached vision is broader than a first release. The implementation follows 
 
 | Phase | Implemented in this release | Gate still outstanding |
 | --- | --- | --- |
-| 0 · Foundation | Interview, owner profile, SQLite, jobs, event log, three provider adapters, owner-confirmed live Kimi task, local routing, caching, budget reservations, three-stage draft batches, dashboard, pause/recovery | General scheduler, webhook ingestion, rate-limit queue and optional Ollama |
+| 0 · Foundation | Interview, owner profile, SQLite, jobs, event log, three provider adapters, owner-confirmed live Kimi task, local routing, caching, budget reservations, three-stage draft batches, persistent business chat, dashboard, scrollable navigation, pause/recovery | General scheduler, webhook ingestion, rate-limit queue and optional Ollama |
 | 1 · Money visibility | Manual entry/import, integer cents, P&L, cost estimates, provisional reserve, review time, evidence export | Reconciliation against real payment/bank statements; actual owner income/cost entries |
 | 2 · First revenue loop | Six playbooks, explicit launch direction, dependent offer/asset/copy drafts, versioned review, Guardian inspection and an exact-approved unpublished Shopify page adapter | Tested adapters for the owner-selected offer: validated demand → approved live offer → paid order → delivery → support |
 | 3 · Attention | Private content draft workspace and review | Official publishing, social research data, media rendering pipeline, schedules, engagement and traffic attribution |
@@ -32,7 +32,7 @@ The vision’s income goal remains the acceptance criterion for future phases. I
 | Interview and owner schema | `docs/onboarding.md`, `server/validation.mjs`, `src/Onboarding.tsx` |
 | All agent definitions and playbooks | `config/agents.json`, `config/playbooks.json` |
 | Working foundation, finance and launch drafts | `server/`, `src/`, `electron/`, `tests/` |
-| Dashboard and installer | `dist/`, `release/The Hub Setup 0.1.4.exe` |
+| Dashboard and installer | `dist/`, `release/The Hub Setup 0.1.5.exe` |
 | Token cost assumptions | `docs/cost-model.md` |
 | Install/operate/pause/uninstall | `docs/runbook.md` |
 | Original and improved prompt | Original retained locally and excluded from published source; refined design in `docs/superpowers/specs/2026-10-17-hub-design.md` |

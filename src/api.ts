@@ -1,4 +1,5 @@
 let session=sessionStorage.getItem('hub-session');
+export class APIError extends Error {readonly status:number;constructor(message:string,status:number){super(message);this.name='APIError';this.status=status;}}
 export async function connect(){
   const hash=new URLSearchParams(location.hash.slice(1));
   if(hash.has('session')){session=hash.get('session');sessionStorage.setItem('hub-session',session||'');history.replaceState(null,'',location.pathname);}
@@ -6,7 +7,7 @@ export async function connect(){
 }
 export async function api<T>(path:string,body?:unknown):Promise<T>{
   const res=await fetch('/api'+path,{method:body===undefined?'GET':'POST',headers:{authorization:`Bearer ${session}`,...(body!==undefined?{'content-type':'application/json'}:{})},...(body!==undefined?{body:JSON.stringify(body)}:{})});
-  if(!res.ok){let message='The request could not complete.';try{const error:unknown=await res.json();if(typeof error==='object'&&error!==null&&'error'in error&&typeof error.error==='string')message=error.error;}catch{/* The service may be restarting. */}throw new Error(message);}
+  if(!res.ok){let message='The request could not complete.';try{const error:unknown=await res.json();if(typeof error==='object'&&error!==null&&'error'in error&&typeof error.error==='string')message=error.error;}catch{/* The service may be restarting. */}throw new APIError(message,res.status);}
   return res.json();
 }
 export async function download(path:string,filename:string){

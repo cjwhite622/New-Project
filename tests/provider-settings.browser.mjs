@@ -25,7 +25,8 @@ try{
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto(base+'/#session=fixture-session');
   async function task(prompt,status){
-    await page.getByRole('button',{name:'Ask your team'}).click();
+    await page.getByRole('button',{name:'Overview',exact:true}).click();
+    await page.getByRole('button',{name:'Ask your Manager',exact:true}).click();
     await page.getByLabel('Give your team some context').fill(prompt);
     await page.getByRole('button',{name:'Give task to team'}).click();
     const row=page.getByRole('button',{name:new RegExp(prompt)});

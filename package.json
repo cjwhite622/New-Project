@@ -1,6 +1,6 @@
 {
   "name": "the-hub",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "type": "module",
   "description": "A local-first business hub with governed AI agents",
@@ -16,6 +16,7 @@
     "test:providers:browser": "node tests/provider-settings.browser.mjs",
     "test:launch:browser": "node tests/launch.browser.mjs",
     "test:shopify:browser": "node tests/shopify.browser.mjs",
+    "test:chat:browser": "node tests/chat.browser.mjs",
     "test:desktop": "node tests/desktop.mjs",
     "test:desktop:windows": "node tests/windows-desktop.mjs",
     "test:installer:windows": "node tests/windows-installer.mjs",

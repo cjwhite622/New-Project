@@ -63,6 +63,7 @@ export function createOrchestrator(hub){
       z.object({type:z.literal('launch'),batchId:text.max(100),stage:z.enum(['offer','asset','copy'])}).strict(),
       z.object({type:z.literal('shopify-page'),proposalId:text.max(100)}).strict(),
       z.object({type:z.literal('shopify-action'),approvalId:text.max(100),approvalVersion:z.number().int().positive()}).strict(),
+      z.object({type:z.literal('chat'),conversationId:text.max(100),turnId:text.max(100)}).strict(),
     ]),options.workflow):null;
     const title=options.title?parse(text.max(150),options.title):null;
     const job={...value,...(workflow?{workflow}:{}),...(title?{title}:{}),id:id(),status:'queued',tier:localKinds.has(value.kind)||workflow?.type==='shopify-action'?0:(agent.id==='manager'||agent.id==='portfolio'?2:1),createdAt:now(),result:null,error:null,inputTokens:0,outputTokens:0,costCents:0,cached:false};
@@ -79,7 +80,7 @@ export function createOrchestrator(hub){
   async function cloud(job){
     const p=hub.profile();const agent=hub.agents().find(a=>a.id===job.agentId);const month=now().slice(0,7);
     if(!agent||agent.enabled===false)throw new HubError('This agent is disabled or unavailable.',409);
-    const launchContext=job.workflow?.type==='launch'?hub.launchJobContext(job):job.workflow?.type==='shopify-page'?hub.shopifyJobContext(job):'';
+    const launchContext=job.workflow?.type==='launch'?hub.launchJobContext(job):job.workflow?.type==='shopify-page'?hub.shopifyJobContext(job):job.workflow?.type==='chat'?hub.chatJobContext(job):'';
     if(p.currency!=='USD')throw new HubError('Cloud tasks currently require a USD budget. Currency conversion policy is not configured.',409);
     const used=db.prepare('SELECT COALESCE(SUM(input_tokens+output_tokens+reserved_tokens),0) AS tokens FROM usage WHERE agent_id=? AND month=?').get(agent.id,month).tokens;
     if(used>=agent.tokenBudget)throw new HubError('Agent token budget reached 100%. Review and explicitly raise its limit in Settings.',409);
@@ -146,7 +147,10 @@ export function createOrchestrator(hub){
       }
     }
   }
-  const drain=()=>{if(!running)running=process().finally(()=>{running=null;});return running;};
+  const drain=()=>{
+    if(running)return running.then(()=>{if(!stopped&&!get('paused')&&db.prepare("SELECT 1 FROM jobs WHERE status='queued' LIMIT 1").get())return drain();});
+    running=process().finally(()=>{running=null;});return running;
+  };
   function setPaused(paused){
     const value=parse(z.boolean(),paused);set('paused',value);if(value)controller?.abort();log('owner',value?'team.paused':'team.resumed');event('owner','orchestrator',value?'team.paused':'team.resumed');if(!value)void drain();return {paused:value};
   }

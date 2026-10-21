@@ -6,7 +6,10 @@ export interface OwnerProfile {
   offer:string; assets:string; brand:string; confirmed:true;
 }
 export interface Agent {id:string;name:string;department:string;mission:string;jobDescription:string;tiers:number[];tools:string[];triggers:string[];escalation:string;tokenBudget:number;kpis:string[];readiness:string;enabled?:boolean;}
-export interface Job {id:string;agentId:string;kind:string;prompt:string;title?:string;workflow?:{type:'launch';batchId:string;stage:'offer'|'asset'|'copy'}|{type:'shopify-page';proposalId:string}|{type:'shopify-action';approvalId:string;approvalVersion:number};status:'queued'|'running'|'completed'|'blocked'|'failed';tier:number;createdAt:string;result:string|null;error:string|null;inputTokens:number;outputTokens:number;costCents:number;cached:boolean;provider?:string;reservedCents?:number;}
+export interface Job {id:string;agentId:string;kind:string;prompt:string;title?:string;workflow?:{type:'launch';batchId:string;stage:'offer'|'asset'|'copy'}|{type:'shopify-page';proposalId:string}|{type:'shopify-action';approvalId:string;approvalVersion:number}|{type:'chat';conversationId:string;turnId:string};status:'queued'|'running'|'completed'|'blocked'|'failed';tier:number;createdAt:string;result:string|null;error:string|null;inputTokens:number;outputTokens:number;costCents:number;cached:boolean;provider?:string;reservedCents?:number;}
+export interface ChatTurn {id:string;content:string;createdAt:string;jobId:string;approvalId:string|null;job:Job|null;}
+export interface ChatConversation {id:string;agentId:string;title:string;createdAt:string;updatedAt:string;turns:ChatTurn[];}
+export interface ChatSummary {id:string;agentId:string;title:string;updatedAt:string;turnCount:number;status:Job['status'];}
 export interface LaunchDirection {audience:string;transformation:string;format:'toolkit'|'guide'|'audit'|'coaching';channel:'text'|'video'|'both';}
 export interface LaunchBrief {version:number;direction:LaunchDirection;updatedAt:string;}
 export interface LaunchBatch {id:string;briefVersion:number;direction:LaunchDirection;createdAt:string;approvalId:string|null;outdated:boolean;stages:{id:string;title:string;agentId:string;job:Job|null}[];}

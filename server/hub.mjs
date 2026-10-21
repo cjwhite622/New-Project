@@ -8,6 +8,7 @@ import { createOrchestrator } from './orchestrator.mjs';
 import { createLaunchWorkspace } from './launch.mjs';
 import { createShopifyAPI } from './shopify-api.mjs';
 import { createShopifyWorkspace } from './shopify.mjs';
+import { createChat } from './chat.mjs';
 
 const AGENTS=JSON.parse(readFileSync(new URL('../config/agents.json',import.meta.url),'utf8'));
 const PLAYBOOKS=JSON.parse(readFileSync(new URL('../config/playbooks.json',import.meta.url),'utf8'));
@@ -99,5 +100,6 @@ export function createHub({dataDir,vault=memoryVault(),fetchImpl=fetch}) {
   Object.assign(hub,createLaunchWorkspace(hub));
   Object.assign(hub,createShopifyAPI(hub));
   Object.assign(hub,createShopifyWorkspace(hub));
+  Object.assign(hub,createChat(hub));
   return hub;
 }

@@ -57,6 +57,10 @@ export function createApp(hub,{token,development=false}){
   post('/shopify/page/confirm-not-created',req=>hub.confirmShopifyNotCreated(req.body));
   post('/shopify/page/resolve-review',req=>hub.resolveShopifyPageReview(req.body));
   get('/events',()=>hub.events());
+  get('/chats',()=>hub.chatConversations());
+  get('/chats/:id',req=>hub.chatConversation(req.params.id));
+  post('/chat/messages',req=>{const conversation=hub.sendChatMessage(req.body);void hub.drain();return conversation;});
+  post('/chat/review',req=>hub.reviewChatReply(req.body));
   get('/approvals',()=>hub.approvals());
   post('/approvals',req=>hub.propose(req.body));
   post('/approvals/:id/edit',req=>hub.editApproval(req.params.id,req.body));
