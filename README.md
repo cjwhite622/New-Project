@@ -6,7 +6,7 @@ A local-first desktop workspace for a business and its AI team. This first relea
 
 Downloadable Windows builds are available from the [Windows build workflow](https://github.com/cjwhite622/New-Project/actions/workflows/windows-build.yml). Sign into GitHub, open a successful run, and download **The-Hub-Windows-x64** under Artifacts. Choose **Extract All**, open the **The Hub** folder, and run **The Hub.exe**. This browser download transfers the application to your PC; cloud workspace paths in chat may only open a file viewer. GitHub keeps these build downloads for 90 days.
 
-For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.1.exe**. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; native Windows 10/11 hardware confirmation is still outstanding.
+For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.2.exe**. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; broader Windows 10/11 compatibility checks remain outstanding.
 
 If setup does not open, use the portable download described above. Keep the entire extracted folder together. **Start The Hub.cmd** records Windows/CPU information, the exit code and safe startup stages. It always displays its report after the app exits. This diagnostic release preserves owner data. A download link that does nothing has not transferred the app to your PC; open the HTTPS GitHub download in Edge or Chrome and sign in if asked.
 
@@ -23,7 +23,7 @@ Open `http://localhost:5173`. Or run `npm run build` followed by `npm run server
 
 - Resumable interview, owner confirmation, six business playbooks and sixteen agent definitions.
 - Persistent jobs and structured events, local daily brief, budget review, provisional tax estimate and Guardian system inspection.
-- Private cloud-assisted drafts and ideas through OpenAI, Anthropic or Kimi/Moonshot developer APIs. Keys, enabled models and token rates are editable in the app. Choose an account with appropriate model access. Consumer chat subscriptions do not include API billing.
+- Private cloud-assisted drafts and ideas through OpenAI, Anthropic or Kimi/Moonshot developer APIs. Keys, enabled models and token rates are editable in the app. Kimi defaults to K2.6; its provider card can retrieve available model names and help replace retired K2.5 settings. Choose an account with appropriate model access. Consumer chat subscriptions do not include API billing.
 - Local exact-match caching, Anthropic prompt-cache hints, bounded output, usage-based cost estimates, budget reservations, tier downgrade and per-agent token limits. Unknown paid-call outcomes require a billing check and explicit reconciliation.
 - Versioned approval cards with approve, deny and edit. Decisions never pretend to execute unavailable integrations.
 - Monthly P&L, transaction entry, atomic CSV preview/import, duplicate protection, source attribution, provisional tax reserve, API costs and owner review-time records.
@@ -50,7 +50,7 @@ npm run package:win
 npm run package:portable
 ```
 
-The browser test uses `/usr/bin/chromium`, or `HUB_CHROMIUM_PATH`. Windows packaging uses Electron Builder to prepare the application and a native NSIS compiler to create the installer; it does not require Wine. The lockfile pins the build tooling. The current package targets x64 Windows 10/11. Signing and confirmation on physical Windows 10/11 hardware remain release gates. Native GUI checks already pass on a hosted Windows Server 2025 runner.
+The browser test uses `/usr/bin/chromium`, or `HUB_CHROMIUM_PATH`. Windows packaging uses Electron Builder to prepare the application and a native NSIS compiler to create the installer; it does not require Wine. The lockfile pins the build tooling. The current package targets x64 Windows 10/11. Signing and broader testing on physical Windows 10/11 hardware remain release gates. Native GUI checks already pass on a hosted Windows Server 2025 runner.
 
 `npm run test:desktop` additionally checks an actual Electron GUI on Linux with an available display. Set `HUB_DESKTOP_EXECUTABLE=release/linux-unpacked/the-hub` to check the packaged ASAR application. It uses a disposable workspace and does not establish Windows compatibility.
 

@@ -38,6 +38,7 @@ export function createApp(hub,{token,development=false}){
   post('/profile',req=>hub.saveProfile(req.body));
   post('/pause',req=>hub.setPaused(req.body.paused));
   post('/providers/:id',req=>hub.saveProvider(req.params.id,req.body));
+  post('/providers/:id/models',req=>hub.checkProviderModels(req.params.id));
   post('/agents/:id',req=>hub.saveAgent(req.params.id,req.body));
   post('/rules',req=>hub.saveRules(req.body));
   get('/brand',()=>({content:hub.store.get('brandBible','Use clear, accurate language. No unsupported claims. Be useful and specific.')}));

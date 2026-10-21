@@ -2,9 +2,9 @@
 
 ## Windows installation
 
-Use a 64-bit Windows 10/11 computer. Run `The Hub Setup 0.1.1.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Open The Hub and finish the Manager conversation. Confirm the owner profile before agents activate.
+Use a 64-bit Windows 10/11 computer. Run `The Hub Setup 0.1.2.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Open The Hub and finish the Manager conversation. Confirm the owner profile before agents activate.
 
-The installer is unsigned. The Windows workflow compiles it with native NSIS and runs desktop and installation checks on a disposable Windows Server 2025 runner. Source and packaged GUI launches have passed there. Check the [verification record](verification.md) for the installation results and tested commit. Launch on the owner's physical Windows 10/11 computer still needs confirmation.
+The installer is unsigned. The Windows workflow compiles it with native NSIS and runs desktop and installation checks on a disposable Windows Server 2025 runner. Source and packaged GUI launches have passed there. Check the [verification record](verification.md) for the installation results and tested commit. The owner confirmed version 0.1.1 launches and completes the interview on their Windows PC. The updated build still needs an owner-side cloud request to verify the configured account and model.
 
 For a silent launch, use the portable ZIP and open **Start The Hub.cmd** from its extracted folder in Windows File Explorer. When the process exits, the console stays open and Notepad displays `%TEMP%\The Hub\diagnostics\windows-launch.txt`. If the process stays open without a window, read `%APPDATA%\The Hub\diagnostics\desktop-startup.log` instead. Startup logging falls back to `%TEMP%\The Hub\diagnostics\desktop-startup.log` if its normal folder cannot be written. It records startup stages, runtime versions and error codes, excluding credentials, record contents, error messages and stacks. Do not delete the workspace to troubleshoot launch failures.
 
@@ -17,6 +17,21 @@ For a silent launch, use the portable ZIP and open **Start The Hub.cmd** from it
 5. Connect a developer API key under Settings → Model providers when ready. Verify your model access and token prices. Saved keys are not marked tested until a model request succeeds.
 6. Ask the Manager to explore an idea or ask the Content Strategist to draft a post. Cloud calls require a USD profile in this release.
 7. Review the result in Task history. Send a public draft to Approvals, inspect/edit its exact content, then decide. Approval records permission; it does not publish anything.
+
+## Kimi model-not-found recovery
+
+Kimi K2.5 was [discontinued on August 31, 2026](https://platform.kimi.ai/docs/models). Version 0.1.1 used that retired model by default; Moonshot returns 404 when the model is missing or the account lacks access. Version 0.1.2 defaults new workspaces to `kimi-k2.6`, with configured input/output rates of $0.95/$4 per million tokens for both tiers. Existing saved settings are preserved.
+
+In Settings → Model providers → Kimi / Moonshot:
+
+1. **Check available models** retrieves model names using the saved key without generating text. Save a replacement key before checking it. Select routine and premium models from the returned list; the Manager uses the premium setting.
+2. For saved K2.5 settings, **Use Kimi K2.6** selects that model and its default rates for both tiers. Review the values and click **Save provider** to apply them.
+3. On version 0.1.1, use **Models & token rates** to enter those values manually. This fixes the configuration without reinstalling.
+4. Create a new task. Only a completed generation request changes the provider badge to **Tested by request**. A successful model-list lookup alone does not prove generation access.
+
+For new requests, a structured authentication, permission or model-not-found rejection releases its reservation and reports the cause. Timeouts, interrupted requests, unstructured gateway errors and server failures retain their reservations for billing review. Arbitrary provider error messages are never copied into the app's logs or UI. No request is automatically retried.
+
+An earlier reservation created by 0.1.1 is preserved. Check the provider dashboard and reconcile it in Finance; enter zero only if the provider confirms no charge. The update does not rewrite historical billing outcomes.
 
 ## Money records
 

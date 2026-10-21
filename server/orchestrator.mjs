@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { id, now, hash } from './storage.mjs';
 import { HubError, parse, text, money } from './validation.mjs';
-import { callProvider, estimateCost } from './providers.mjs';
+import { callProvider, estimateCost, ProviderRequestError } from './providers.mjs';
 
 const localKinds=new Set(['digest','budget-review','guardian-scan','tax-estimate']);
 const kindSchema=z.enum(['digest','budget-review','guardian-scan','tax-estimate','draft','brainstorm']);
@@ -104,6 +104,12 @@ export function createOrchestrator(hub){
       job.result=result.text;
     }catch(error){
       if(settled)throw error;
+      if(error instanceof ProviderRequestError&&error.rejected){
+        db.prepare("UPDATE usage SET state='rejected',reserved_cents=0,reserved_tokens=0 WHERE job_id=?").run(job.id);
+        job.reservedCents=0;
+        log(agent.id,'provider.rejected',{jobId:job.id,provider:provider.id});
+        throw new HubError(`The provider rejected the request before generation. Its cost reservation was released. ${error.message}`,502);
+      }
       db.prepare("UPDATE usage SET state='unknown' WHERE job_id=?").run(job.id);
       throw new HubError('Provider execution outcome is unknown. The cost reservation is retained. Check provider billing before retrying. '+(error instanceof HubError?error.message:'The request was interrupted or could not be completed.'),502);
     }finally{clearTimeout(timeout);controller=null;}

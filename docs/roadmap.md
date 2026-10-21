@@ -32,7 +32,7 @@ The vision’s income goal remains the acceptance criterion for future phases. I
 | Interview and owner schema | `docs/onboarding.md`, `server/validation.mjs`, `src/Onboarding.tsx` |
 | All agent definitions and playbooks | `config/agents.json`, `config/playbooks.json` |
 | Working foundation and finance code | `server/`, `src/`, `electron/`, `tests/` |
-| Dashboard and installer | `dist/`, `release/The Hub Setup 0.1.1.exe` |
+| Dashboard and installer | `dist/`, `release/The Hub Setup 0.1.2.exe` |
 | Token cost assumptions | `docs/cost-model.md` |
 | Install/operate/pause/uninstall | `docs/runbook.md` |
 | Original and improved prompt | Original retained locally and excluded from published source; refined design in `docs/superpowers/specs/2026-10-17-hub-design.md` |

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { z } from 'zod';
 import { createStorage, id, now } from './storage.mjs';
 import { createFinance } from './finance.mjs';
-import { DEFAULT_PROVIDERS, memoryVault } from './providers.mjs';
+import { DEFAULT_PROVIDERS, memoryVault, listMoonshotModels } from './providers.mjs';
 import { profileSchema, HubError, parse, money, text } from './validation.mjs';
 import { createOrchestrator } from './orchestrator.mjs';
 
@@ -36,6 +36,14 @@ export function createHub({dataDir,vault=memoryVault(),fetchImpl=fetch}) {
     const change=parse(z.object({tokenBudget:z.number().int().min(0).max(100000000),enabled:z.boolean().optional()}),input);
     set(`agent:${agentId}`,change);log('owner','agent.configured',{agentId,...change});return agents();
   };
+  async function checkProviderModels(providerId){
+    requireOwner();
+    if(providerId!=='moonshot')throw new HubError('Available-model checking is currently supported for Kimi / Moonshot only.');
+    const key=vault.get(providerId);
+    if(!key)throw new HubError('Save a Kimi API key before checking available models.',409);
+    try{return {models:await listMoonshotModels({key,fetchImpl,signal:AbortSignal.timeout(15000)})};}
+    catch(error){if(error instanceof HubError)throw error;throw new HubError('Could not retrieve Kimi models. Check the network connection. No generation request was sent.',502);}
+  }
   const personal={
     get:()=>{const row=store.privateDb.prepare('SELECT data FROM personal WHERE id=1').get();return row?JSON.parse(row.data):{goals:'',notes:'',checkIn:'On my terms',health:'',sleep:'',relationships:'',growth:'',schedule:''};},
     save:input=>{
@@ -43,7 +51,7 @@ export function createHub({dataDir,vault=memoryVault(),fetchImpl=fetch}) {
       store.privateDb.prepare('INSERT INTO personal VALUES (1,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data').run(JSON.stringify(value));return value;
     },
   };
-  const hub={store,vault,fetchImpl,agents,profile,providers,requireOwner,...finance,personal,saveProvider,saveAgent,
+  const hub={store,vault,fetchImpl,agents,profile,providers,requireOwner,...finance,personal,saveProvider,saveAgent,checkProviderModels,
     playbooks:()=>PLAYBOOKS,
     saveInterview(input){
       const value=parse(z.object({step:z.number().int().min(0).max(30),answers:z.record(z.string(),z.union([z.string().max(5000),z.number(),z.boolean()]))}),input);

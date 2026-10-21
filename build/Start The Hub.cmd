@@ -8,7 +8,7 @@ if not exist "%HUB_REPORT_DIR%" mkdir "%HUB_REPORT_DIR%" >nul 2>&1
 set "HUB_REPORT=%HUB_REPORT_DIR%\windows-launch.txt"
 
 > "%HUB_REPORT%" echo The Hub Windows launch report
->> "%HUB_REPORT%" echo Application version: 0.1.1
+>> "%HUB_REPORT%" echo Application version: 0.1.2
 >> "%HUB_REPORT%" ver
 >> "%HUB_REPORT%" echo Processor architecture: %PROCESSOR_ARCHITECTURE%
 if defined PROCESSOR_ARCHITEW6432 >> "%HUB_REPORT%" echo Native processor architecture: %PROCESSOR_ARCHITEW6432%
