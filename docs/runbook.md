@@ -4,7 +4,7 @@
 
 Use a 64-bit Windows 10/11 computer. Run `The Hub Setup 0.1.1.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Open The Hub and finish the Manager conversation. Confirm the owner profile before agents activate.
 
-The installer is unsigned. This build has been compiled on Linux and still needs a native Windows installation, launch, upgrade and uninstall smoke test before distribution. Do not treat compilation or a Wine run as proof of native Windows compatibility.
+The installer is unsigned. The Windows workflow compiles it with native NSIS and runs desktop and installation checks on a disposable Windows Server 2025 runner. Source and packaged GUI launches have passed there. Check the [verification record](verification.md) for the installation results and tested commit. Launch on the owner's physical Windows 10/11 computer still needs confirmation.
 
 For a silent launch, use the portable ZIP and open **Start The Hub.cmd** from its extracted folder in Windows File Explorer. When the process exits, the console stays open and Notepad displays `%TEMP%\The Hub\diagnostics\windows-launch.txt`. If the process stays open without a window, read `%APPDATA%\The Hub\diagnostics\desktop-startup.log` instead. Startup logging falls back to `%TEMP%\The Hub\diagnostics\desktop-startup.log` if its normal folder cannot be written. It records startup stages, runtime versions and error codes, excluding credentials, record contents, error messages and stacks. Do not delete the workspace to troubleshoot launch failures.
 

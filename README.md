@@ -6,9 +6,9 @@ A local-first desktop workspace for a business and its AI team. This first relea
 
 Downloadable Windows builds are available from the [Windows build workflow](https://github.com/cjwhite622/New-Project/actions/workflows/windows-build.yml). Sign into GitHub, open a successful run, and download **The-Hub-Windows-x64** under Artifacts. Choose **Extract All**, open the **The Hub** folder, and run **The Hub.exe**. This browser download transfers the application to your PC; cloud workspace paths in chat may only open a file viewer. GitHub keeps these build downloads for 90 days.
 
-Windows users can install `release/The Hub Setup 0.1.1.exe`. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned. A native Windows install/uninstall test is still required before a public release.
+For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.1.exe**. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; native Windows 10/11 hardware confirmation is still outstanding.
 
-If setup does not open, use `release/The-Hub-0.1.1-Windows-x64.zip`. Save it to your Windows computer, choose **Extract All** in File Explorer, then open the extracted **The Hub** folder and run **The Hub.exe**. Keep the entire folder together. **Start The Hub.cmd** records Windows/CPU information, the exit code and safe startup stages. It always displays its report after the app exits. This diagnostic release preserves owner data. The reported silent Windows launch still needs a Windows report to identify its cause.
+If setup does not open, use the portable download described above. Keep the entire extracted folder together. **Start The Hub.cmd** records Windows/CPU information, the exit code and safe startup stages. It always displays its report after the app exits. This diagnostic release preserves owner data. A download link that does nothing has not transferred the app to your PC; open the HTTPS GitHub download in Edge or Chrome and sign in if asked.
 
 For development, install Node.js 24 and run:
 
@@ -50,10 +50,10 @@ npm run package:win
 npm run package:portable
 ```
 
-The browser test uses `/usr/bin/chromium`, or `HUB_CHROMIUM_PATH`. Windows packaging uses Electron Builder to prepare the application and a native NSIS compiler to create the installer; it does not require Wine. The lockfile pins the build tooling. The current package is x64 for Windows 10/11. Signing and an actual Windows smoke test are release gates.
+The browser test uses `/usr/bin/chromium`, or `HUB_CHROMIUM_PATH`. Windows packaging uses Electron Builder to prepare the application and a native NSIS compiler to create the installer; it does not require Wine. The lockfile pins the build tooling. The current package targets x64 Windows 10/11. Signing and confirmation on physical Windows 10/11 hardware remain release gates. Native GUI checks already pass on a hosted Windows Server 2025 runner.
 
 `npm run test:desktop` additionally checks an actual Electron GUI on Linux with an available display. Set `HUB_DESKTOP_EXECUTABLE=release/linux-unpacked/the-hub` to check the packaged ASAR application. It uses a disposable workspace and does not establish Windows compatibility.
 
-The Windows workflow runs the source and packaged desktop checks on a disposable GitHub-hosted Windows runner before uploading downloads. `npm run test:desktop:windows` refuses other environments and refuses to reuse an existing Hub profile. The shipped application's sandbox and graphics settings are used for both Windows checks.
+The Windows workflow runs source and packaged desktop checks, then `npm run test:installer:windows` to install, open, reinstall and uninstall the application while checking that both saved workspace databases survive unchanged. These tests require a disposable GitHub-hosted Windows runner and refuse to reuse an existing Hub profile or installation. All desktop checks use the shipped application's sandbox and graphics settings.
 
 See [architecture](docs/architecture.md), [runbook](docs/runbook.md), [cost model](docs/cost-model.md), [interview and schema](docs/onboarding.md), [requirements and roadmap](docs/roadmap.md), and [verification record](docs/verification.md). The original attachment is retained in the local workspace and excluded from published source. Improvements and scope decisions are in [refined design](docs/superpowers/specs/2026-10-17-hub-design.md).

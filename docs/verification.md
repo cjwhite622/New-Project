@@ -13,11 +13,11 @@ Verification updated: October 21, 2026. Desktop release: 0.1.1.
 - An independent code review identified recovery, request-retry, CSV normalization, reservation/currency and incomplete-output issues. Regression fixes were applied and verified.
 - The source and packaged Linux Electron GUI both open the owner interview, persist its first answer through the loopback API, keep Node out of the renderer, and write startup stages without the session URL/token. These checks use disposable workspaces.
 - The Windows diagnostic batch launcher was run under Wine with a zero-exit executable fixture. It prints the report, includes startup stages and reaches its pause after exit code zero. Portable ZIP CRCs pass, its executable/ASAR match the packaged Windows files, and the source ZIP matches every included workspace file.
-- [Native Windows build 39584830761](https://github.com/cjwhite622/New-Project/actions/runs/39584830761) passes all 32 tests, compiles the NSIS installer, and opens both the source and packaged desktop GUI on a disposable Windows Server 2025 runner. Both GUI checks save the first interview answer, reload it, verify renderer isolation and inspect the safe startup log. Screenshots and logs are uploaded as test evidence. The portable and installer downloads are uploaded successfully. Tested runtime commit: `cb42a8607228641480bef8732acb15714faf9421`.
+- [Native Windows build 39587505160](https://github.com/cjwhite622/New-Project/actions/runs/39587505160) passes all 32 tests, compiles the NSIS installer, and opens the source, packaged and installed desktop GUI on a disposable Windows Server 2025 runner. All three GUI checks save the first interview answer, reload it, verify renderer isolation and inspect the safe startup log. The installer check runs silent installation, same-version reinstall and uninstall; installed executable/ASAR hashes match the packaged application, uninstall removes the application directory, and both workspace SQLite files retain their exact hashes after reinstall and uninstall. Screenshots, safe startup logs and the lifecycle result are uploaded as test evidence. Portable and installer downloads are uploaded successfully. Tested implementation commit: `78cc50cffb23e4e1665763618430602de4307e54`.
 
 ## Build and compatibility limits
 
-The native NSIS Windows installer is built from the packaged x64 Electron application. The packaged application has now launched successfully on a hosted Windows runner. Interactive installation, reinstall, uninstall and Windows 10/11 hardware checks remain outstanding. The first display-less Linux Electron attempt exited with SIGSEGV. Subsequent virtual-display tests successfully opened both the source and packaged Linux GUI.
+The native NSIS Windows installer is built from the packaged x64 Electron application after validating its executable and ASAR output. Native Windows source, packaged and installed GUI checks and the silent installer lifecycle pass. The interactive wizard, upgrades between different versions and physical Windows 10/11 hardware checks remain outstanding. The first display-less Linux Electron attempt exited with SIGSEGV. Subsequent virtual-display tests successfully opened both the source and packaged Linux GUI.
 
 A Windows 10/11 user reported that both the installer and the original portable application do nothing when opened. The original installer passes a 7-Zip NSIS payload integrity check. The exact failure on that computer has not yet been identified.
 
@@ -38,5 +38,7 @@ npm run test:browser
 npm audit --omit=dev --audit-level=high
 npm run package:win
 ```
+
+The Windows workflow also runs `npm run test:desktop:windows` for source and packaged applications and `npm run test:installer:windows`. These installation checks are restricted to a disposable GitHub-hosted Windows runner and refuse an existing application directory or owner profile. They never run against the owner's real workspace.
 
 Browser screenshots use disposable test input and finance records. They are evidence of application behavior, not evidence of income. The installed app starts with an empty workspace and the owner interview.
