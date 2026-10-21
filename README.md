@@ -4,6 +4,8 @@ A local-first desktop workspace for a business and its AI team. This release imp
 
 ## Get started
 
+Latest verified release: **0.1.4** — [installer ZIP](https://github.com/cjwhite622/New-Project/actions/runs/39611539176/artifacts/12351570726) · [portable ZIP](https://github.com/cjwhite622/New-Project/actions/runs/39611539176/artifacts/12351850393). These links require GitHub sign-in and expire January 19, 2027.
+
 Downloadable Windows builds are available from the [Windows build workflow](https://github.com/cjwhite622/New-Project/actions/workflows/windows-build.yml). Sign into GitHub, open a successful run, and download **The-Hub-Windows-x64** under Artifacts. Choose **Extract All**, open the **The Hub** folder, and run **The Hub.exe**. This browser download transfers the application to your PC; cloud workspace paths in chat may only open a file viewer. GitHub keeps these build downloads for 90 days.
 
 For installation, download **The-Hub-Installer** from the same successful workflow run, choose **Extract All**, and open **The Hub Setup 0.1.4.exe**. Close any older copy before installing. Existing workspaces and saved provider settings are preserved. Open The Hub, complete the interview and confirm your plan. No terminal or configuration file is needed in the installed application. The installer is unsigned; broader Windows 10/11 compatibility checks remain outstanding.
