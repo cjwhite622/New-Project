@@ -6,6 +6,8 @@ import { DEFAULT_PROVIDERS, memoryVault, listMoonshotModels } from './providers.
 import { profileSchema, HubError, parse, money, text } from './validation.mjs';
 import { createOrchestrator } from './orchestrator.mjs';
 import { createLaunchWorkspace } from './launch.mjs';
+import { createShopifyAPI } from './shopify-api.mjs';
+import { createShopifyWorkspace } from './shopify.mjs';
 
 const AGENTS=JSON.parse(readFileSync(new URL('../config/agents.json',import.meta.url),'utf8'));
 const PLAYBOOKS=JSON.parse(readFileSync(new URL('../config/playbooks.json',import.meta.url),'utf8'));
@@ -86,14 +88,16 @@ export function createHub({dataDir,vault=memoryVault(),fetchImpl=fetch}) {
         ...providers().map(provider=>({id:provider.id,label:provider.name,state:provider.connected?(provider.verifiedAt?'ready':'attention'):'attention',detail:provider.connected?(provider.verifiedAt?'A model request has succeeded.':`Key saved ${provider.storage==='session-only'?'for this session':''}; model access not yet tested.`):'Connect an API key when you are ready for cloud tasks.'})),
         {id:'budgets',label:'Spending controls',state:p?'ready':'attention',detail:p?'API, operating and hard limits are enforced before cloud work.':'Budgets will be set during your interview.'},
         {id:'audit',label:'Local audit trail',state:store.verify().valid?'ready':'blocked',detail:`${store.verify().entries} entries; ${store.verify().valid?'hash chain intact':'integrity check failed'}.`},
-        {id:'business',label:'Business connections',state:'attention',detail:'Store, payment, booking and publishing adapters are a later release gate.'},
+        {id:'business',label:'Business connections',state:'attention',detail:hub.shopifyConnection().verifiedAt?'Shopify identity checked. Unpublished pages need exact action approval; other business adapters remain pending.':'Shopify draft-page adapter available in Business connections. Email, payments, bookings and public publishing remain later gates.'},
         {id:'income',label:'Verified income',state:'attention',detail:'No independently verified settlement data. Recorded revenue is not income proof.'},
       ];
     },
-    state(){return {profile:profile(),interview:get('interview',{step:0,answers:{}}),paused:get('paused'),agents:agents(),playbooks:PLAYBOOKS,providers:providers(),rules:get('rules'),finance:finance.finance(),jobs:hub.jobs(),approvals:hub.approvals(),launch:hub.launchState(),audit:store.audit(12),systemCheck:hub.systemCheck(),phase:'Phase 0 + 1',version:VERSION,vaultPersistent:Boolean(vault.persistent),unknownUsage:hub.unknownUsage()};},
+    state(){return {profile:profile(),interview:get('interview',{step:0,answers:{}}),paused:get('paused'),agents:agents(),playbooks:PLAYBOOKS,providers:providers(),rules:get('rules'),finance:finance.finance(),jobs:hub.jobs(),approvals:hub.approvals(),launch:hub.launchState(),shopify:hub.shopifyState(),audit:store.audit(12),systemCheck:hub.systemCheck(),phase:'Phase 0 + 1',version:VERSION,vaultPersistent:Boolean(vault.persistent),unknownUsage:hub.unknownUsage()};},
     close(){hub.stop();store.close();},
   };
   Object.assign(hub,createOrchestrator(hub));
   Object.assign(hub,createLaunchWorkspace(hub));
+  Object.assign(hub,createShopifyAPI(hub));
+  Object.assign(hub,createShopifyWorkspace(hub));
   return hub;
 }

@@ -1,11 +1,14 @@
 # Verification record
 
-Verification updated: October 21, 2026. Desktop release: 0.1.3.
+Verification updated: October 21, 2026. Desktop release: 0.1.4; native Windows release validation pending below.
 
 ## Verified
 
+- Version 0.1.4 adds 21 Shopify regressions and business-route guards. They cover fixed host/version, secret boundaries, expiring client-credentials grants, approved-source extraction, HTML escaping, exact review/payload binding, forced unpublished writes, stale source/connection and disabled-agent blocks, replay/veto preservation, older holds, preflight cleanup, explicit review refresh, unknown-result reconciliation, owner-reported recovery, known mismatch resolution by saved page ID and pause during dispatch. A delayed token-renewal fixture reproduces the final-dispatch race before the fix and verifies zero writes after veto, source changes or disabling Publishing.
+- All four browser workflows pass against the 0.1.4 production UI. The new Shopify workflow saves/checks a connection, recovers a lost preview POST without another model job, edits public copy, approves the exact action, verifies one unpublished write and durable receipt, then recovers an older unknown action while a newer proposal is visible. Connection desktop/mobile, preview and recovery-mobile WCAG A/AA scans contain no violations; no mobile horizontal overflow or page errors were observed. All external responses are controlled fixtures; no real merchant or paid call was made.
+- Shopify’s 2026-10 documentation and read-only schema metadata were checked for page-create fields, user errors, scope requirements, default publication behavior and supported handle search. The plugin codeblock validator reported that validation was skipped; no real mutation was executed to obtain validation. Real app credentials, account permissions and page behavior still require a development/test-store check before a merchant action.
 - TypeScript checking and Vite production compilation pass.
-- All 50 domain/API/startup/provider/launch tests pass and cover interview activation/persistence, exact-cent P&L, invalid dates/amounts, atomic CSV imports, duplicate/conflicting references, normalized money hashes, private-data exclusion, local task events, cached cloud responses, provider usage, budget reservations, concurrent work, 80/100% ceilings, pause/abort, queue resume, crash recovery, approval version/edit/replay, currency and commitment guards, incomplete output, audit tamper detection and business backup recovery. Startup regressions cover missing GUI console handles, server import without stderr, safe diagnostic fallback/privacy, and workspace closure when startup or draining fails.
+- All 72 domain/API/startup/provider/launch/Shopify tests pass and cover interview activation/persistence, exact-cent P&L, invalid dates/amounts, atomic CSV imports, duplicate/conflicting references, normalized money hashes, private-data exclusion, local task events, cached cloud responses, provider usage, budget reservations, concurrent work, 80/100% ceilings, pause/abort, queue resume, crash recovery, approval version/edit/replay, currency and commitment guards, incomplete output, audit tamper detection and business backup recovery. Startup regressions cover missing GUI console handles, server import without stderr, safe diagnostic fallback/privacy, and workspace closure when startup or draining fails.
 - Controlled provider-response tests exercise request/usage behavior without spending or provisioned keys. They are not live authentication tests.
 - Chromium end-to-end completes the eleven-step interview, creates a local brief, records income, imports an expense, saves/reloads private notes, pauses/resumes, edits owner settings, blocks unconfigured cloud work, edits/approves a draft, checks business-state privacy, and checks the mobile layout. Lost POST responses are simulated to verify that retries preserve one ledger entry and one task.
 - Automated WCAG A/AA scans of first-run onboarding and the overview report no violations in the tested state.
@@ -43,6 +46,7 @@ npm run build
 npm run test:browser
 npm run test:providers:browser
 npm run test:launch:browser
+npm run test:shopify:browser
 npm audit --omit=dev --audit-level=high
 npm run package:win
 ```

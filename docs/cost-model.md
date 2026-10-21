@@ -19,7 +19,7 @@ Assume a 100,000-token month with 80% input/20% output, before per-call rounding
 | Social researcher | $0 | $0.064 | $0.32 | 100k |
 | Content strategist | $0 | $0.064 | $0.32 | 100k |
 | Video producer prompts | $0 | $0.064 | $0.32 | 100k; video generation excluded |
-| Publishing | $0 | $0.064 | $0.32 | 100k; execution unavailable |
+| Publishing | $0 | $0.064 | $0.32 | 100k; exact-approved unpublished Shopify page action available |
 | Community manager | $0 | $0.064 | $0.32 | 100k |
 | Monetization | $0 | $0.064 | $0.32 | 100k |
 | Bookkeeper | $0 | $0.064 | $0.32 | 100k |
@@ -48,3 +48,5 @@ The 75% local share is a target assumption, not a measured result. Scale exceeds
 The operating plan must also reserve subscriptions, ads, fulfillment, platform fees, refunds, professional advice and taxes from actual data. A low language-model cost does not establish a profitable business.
 
 Kimi defaults were checked against the [official model list](https://platform.kimi.ai/docs/models), [parameter reference](https://platform.kimi.ai/docs/api/models-overview) and [published rates](https://platform.kimi.ai) on October 21, 2026. Kimi K2.5 was discontinued on August 31. Existing saved models and rates are preserved on update; the provider card offers an explicit K2.6 model/rate change. The model-list check is a read-only API request and does not generate text or mark the provider as tested by a draft.
+
+Preparing a Shopify page preview uses one normal budgeted routine-model request, or an exact cached result. Connection checks and the deterministic unpublished-page action use zero model tokens and record no model charge. Existing Shopify subscriptions, app/platform fees and eventual payment processing costs are separate and are not fetched or estimated by this adapter. Gmail, Hostinger and Stripe operations are not yet executed by the app.

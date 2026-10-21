@@ -2,6 +2,7 @@ import {useRef,useState} from 'react';
 import {ArrowRight,CheckCircle2,FileText,Layers3,Save,ShieldCheck,Sparkles} from 'lucide-react';
 import {api,money,requestId,shortDate} from './api';
 import {Badge,Button,PageTitle,Spinner} from './components';
+import ShopifyWorkspace from './ShopifyWorkspace';
 import type {HubState,Job,LaunchBatch,LaunchBrief,LaunchDirection} from './types';
 
 type DirectionForm=Omit<LaunchDirection,'format'|'channel'>&{format:LaunchDirection['format']|'';channel:LaunchDirection['channel']|''};
@@ -64,5 +65,6 @@ export default function Launch({state,refresh,notify,viewJob,navigate}:{state:Hu
       </div>
     </section></div>
     <section className="panel launch-review"><div className="step-icon sage"><Layers3 size={22}/></div><div><h2>3. Review in one place</h2><p>{batch?.approvalId?`This pack is in Approvals${approval?` · ${approval.status}`:''}.`:'When all three drafts complete, send the exact pack to your approval queue.'}</p><p>Publishing, email, bookings, checkout and delivery need connected adapters and a separate review of the actual action.</p></div>{batch?.approvalId?<Button onClick={()=>navigate('approvals')}>Open Approvals<ArrowRight size={15}/></Button>:<Button variant="primary" onClick={()=>void review()} disabled={Boolean(busy)||!complete||batch?.outdated||changed||stale}>{busy==='review'?<Spinner/>:<ShieldCheck size={15}/>}Send pack to Approvals</Button>}</section>
+    <ShopifyWorkspace state={state} refresh={refresh} notify={notify} viewJob={viewJob} navigate={navigate}/>
   </>;
 }

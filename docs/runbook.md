@@ -2,7 +2,7 @@
 
 ## Windows installation
 
-Use a 64-bit Windows 10/11 computer. Close any older copy and run `The Hub Setup 0.1.3.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Existing owner data and saved provider settings are preserved. Open The Hub and finish the Manager conversation if this is a new workspace. Confirm the owner profile before agents activate.
+Use a 64-bit Windows 10/11 computer. Close any older copy and run `The Hub Setup 0.1.4.exe`. The installer places the application in your user’s local Programs folder and adds Start menu shortcuts. It needs no administrator account. Existing owner data and saved provider settings are preserved. Open The Hub and finish the Manager conversation if this is a new workspace. Confirm the owner profile before agents activate.
 
 The installer is unsigned. The Windows workflow compiles it with native NSIS and runs desktop and installation checks on a disposable Windows Server 2025 runner. Source and packaged GUI launches have passed there. Check the [verification record](verification.md) for the installation results and tested commit. The owner confirmed version 0.1.1 launches and completes the interview on their Windows PC. The owner also reported a completed live Manager task after correcting both Kimi model settings to K2.6. The automated model-discovery and recovery tests use controlled responses; provider invoices remain the authority for charges.
 
@@ -26,7 +26,23 @@ If the draft request loses its response, **Retry draft request** checks the same
 
 Changing the saved direction or owner profile marks the old pack outdated. Queued stages stop before dispatch, and a completed outdated pack cannot be submitted as a new review. A request already received by the provider may still be charged. **Prepare fresh drafts** is a new explicit, budgeted request after prior work has finished and uncertain billing has been reconciled. Prior jobs and approvals remain in their history.
 
-The Manager receives your confirmed business time and budget limits. Personal journal data and provider keys are excluded. Review time suggestions are model guidance; record actual time in Finance. Draft prices, demand estimates and service recommendations still need evidence before public use. Publishing, email, booking, payment and delivery connections remain outstanding engineering work.
+The Manager receives your confirmed business time and budget limits. Personal journal data and provider keys are excluded. Review time suggestions are model guidance; record actual time in Finance. Draft prices, demand estimates and service recommendations still need evidence before public use. Public publishing, email, booking, payment and delivery connections remain outstanding engineering work.
+
+## Shopify draft-page connection and action
+
+Version 0.1.4 adds the first business adapter. Your approved launch pack is source material; its approval does not itself authorize a store change.
+
+1. Open **Settings → Business connections**. Enter the permanent `your-store.myshopify.com` domain, without a URL or path.
+2. In Shopify’s Dev Dashboard, configure and install an app on your own store with `write_online_store_pages` or `write_content`. Apps/stores in the same organization can use the app client ID and secret. The Hub renews expiring tokens through the official client-credentials grant. Alternatively enter a working Admin API access token. This adapter needs no customer, order or payment access. Enter credentials only in The Hub. They are OS-encrypted in the installed app when available, session-only otherwise, and excluded from prompts and business backups.
+3. **Save Shopify connection**, then **Check Shopify connection**. This reads store identity and granted scopes only. Changing or disconnecting settings invalidates the check and unexecuted action review.
+4. In Launch, **Prepare Shopify page preview** uses one budgeted Content Strategist request, or its exact cache match. It extracts public copy from the currently approved pack. Review and edit the title/body locally, then save changes. Internal strategy, the starter asset itself and welcome emails are excluded by the extraction prompt; inspect the resulting copy before approving an external action.
+5. **Review Shopify draft action** shows the exact store, title, unique handle and body in Approvals. Approving queues a deterministic Publishing job with `isPublished: false`. Only this managed action can call the page adapter. The adapter rechecks source, approval version, store identity, credentials, agent availability and pause at dispatch. Changing copy or credentials requires a fresh review. A returned page ID appears in Launch and Approvals.
+
+The page remains unpublished. Customer capture, forms, products, checkout, digital delivery and email are not activated. Gmail, Hostinger and Stripe remain the intended other services; their operational adapters are not in this slice. Shopify payment-provider availability depends on the merchant’s country and Shopify Payments eligibility; do not assume a separate Stripe account can be selected inside Shopify checkout.
+
+If the preview POST loses its response, **Retry page preview request** checks the same local operation without another job. A store write is never automatically retried. If its response is lost or the app closes during dispatch, the action stays **unknown**. Launch exposes every held action, including older proposals. **Check Shopify result** performs a read-only exact-handle lookup in the original store; zero matches keep the hold. If Shopify separately confirms no page was created, record that conclusion and a note. This is owner-reported evidence and permits a new review, not an automatic write. Veto cannot undo or hide a dispatched attempt.
+
+A returned page whose copy or visibility differs from the review stays held for inspection. A read-only check uses its saved page ID. You may record your own inspection and acceptance of that known page with a note; this is explicitly owner-reported, keeps the receipt, and cannot repeat the same action. It does not change or publish the page. Pre-dispatch failures become blocked and can receive a fresh exact review after the underlying issue is corrected. Pause can interrupt transport but cannot reverse a change Shopify already received.
 
 ## Kimi model-not-found recovery
 
@@ -67,7 +83,7 @@ Model output cut off by a token limit fails visibly. Known usage is still record
 
 ## Pause and resume
 
-**Pause all agents** persists the pause and interrupts the active model request. It cannot reverse a request already received by a provider. You can inspect records and settings while paused. **Resume team** starts queued jobs again. Interrupted paid jobs become failed on restart and need billing reconciliation; they do not replay automatically.
+**Pause all agents** persists the pause and interrupts the active model or Shopify request. It cannot reverse a request already received by a provider. You can inspect records and settings while paused. **Resume team** starts queued jobs again. Interrupted paid jobs become failed on restart and need billing reconciliation; they do not replay automatically.
 
 Closing the app stops work. It does not create a new user pause preference. If you explicitly paused, the next launch remains paused.
 

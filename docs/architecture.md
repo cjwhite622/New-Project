@@ -28,6 +28,8 @@ flowchart LR
 | `server/orchestrator.mjs` | Queue, routing, budget reservation, pause, recovery and approval versions |
 | `server/business-context.mjs` | Explicit business-field allowlist and confirmed owner constraints in cloud prompts |
 | `server/launch.mjs` | Versioned launch direction, atomic three-job batches, dependency checks and exact review packs |
+| `server/shopify-api.mjs` | Fixed Shopify API/auth contracts, token renewal and read-only connection inspection |
+| `server/shopify.mjs` | Source-bound page proposals, protected action payloads, dispatch and receipt recovery |
 | `server/providers.mjs` | Provider request/response contracts, token pricing, session key vault |
 | `server/app.mjs` | Authenticated HTTP interface, origin/host checks and exports |
 | `electron/main.cjs` | Desktop lifecycle, OS-encrypted key storage and isolated renderer |
@@ -38,7 +40,7 @@ flowchart LR
 
 The owner confirms the interview before tasks or provider connections are accepted. A unique request ID creates a queued job and event. The worker runs jobs one at a time, so budget checks and reservations cannot race. A deterministic task returns local calculations with zero model tokens. A cloud task chooses the least expensive enabled, connected provider for the requested tier.
 
-The cloud path uses the agent mission, an explicit allowlist of business interview fields, Brand Bible and task. The allowlist includes confirmed weekly hours, experience, currency, income target, startup/operating/API budgets and the hard spending cap. It does not spread arbitrary profile properties. Prompts assign operational work to agents, reserve the owner's time for ideas and review, and identify unavailable connections. Model instructions do not enforce actual owner time or output correctness. The worker has no tool calls, credentials in prompts, personal journal access, or execution permissions. An exact cache match returns without a paid call; changed business constraints invalidate that match. Otherwise, the worker reserves a conservative input-byte/output-token cost estimate and agent token allowance inside a database transaction. It checks the monthly API, operating and hard limits before dispatch.
+The cloud path uses the agent mission, an explicit allowlist of business interview fields, Brand Bible and task. The allowlist includes confirmed weekly hours, experience, currency, income target, startup/operating/API budgets and the hard spending cap. It does not spread arbitrary profile properties. Prompts assign operational work to agents, reserve the owner's time for ideas and review, and identify unavailable connections. Model instructions do not enforce actual owner time or output correctness. The model receives no tool calls, credentials, personal journal access or execution permissions. A separate deterministic action path implements the fixed Shopify page adapter. An exact cache match returns without a paid call; changed business constraints invalidate that match. Otherwise, the worker reserves a conservative input-byte/output-token cost estimate and agent token allowance inside a database transaction. It checks the monthly API, operating and hard limits before dispatch.
 
 Known usage settles the reservation and records an API expense estimate. Anthropic cached input tokens count toward usage; pricing conservatively includes cache-write overhead. Incomplete/truncated responses settle known usage, fail visibly and never enter the completed cache. Network failures, missing usage and interruption retain the maximum reservation as unknown. The owner records the provider billing outcome in Finance to release it. The app does not retry paid requests automatically.
 
@@ -60,6 +62,16 @@ An approval includes who, what, why, cost, risk, expected outcome, recommendatio
 
 Pause persists and aborts the active provider request. Resume drains queued work. Restart marks interrupted jobs failed and exposes their retained reservations for reconciliation. Queued jobs can resume; paid jobs with unknown outcomes never replay automatically. Settings and local records remain accessible while paused.
 
+## Shopify draft action
+
+The connection stores non-secret shop identity, app mode/client ID, granted scopes, version and last read-only check in business documents. Its token/client secret uses the existing OS-encrypted or session vault under a separate key. Client-credentials grants renew tokens in memory. The official Admin GraphQL endpoint is fixed to the validated permanent shop domain and version 2026-10; redirects are rejected.
+
+A page proposal binds the approved launch pack ID/version/hash. One budgeted Strategist task returns validated plain title/body text; invalid output settles known usage, fails visibly and is not cached. The renderer previews text and the server escapes it to paragraph HTML. A unique local handle supports recovery. The exact action review binds the saved proposal version, store ID/domain, connection version, payload hash, review hash and `isPublished: false`. Generic approval APIs cannot forge managed action metadata or edit its payload.
+
+Approval atomically queues one deterministic Publishing job. The serialized worker reads live identity/scopes and rechecks source, agent availability, pause and version immediately after any token renewal, at the mutation transport boundary. It persists dispatch before calling the fixed `pageCreate`; no other store mutation is implemented. Returned page ID, handle and visibility are durable receipts. An exact unpublished response becomes `draft_created`; a mismatch becomes `review_required`. No model interprets credentials or decides to execute a tool.
+
+Queued/creating/unknown/mismatched actions hold further writes, including already-prepared reviews. Every held action remains visible in Launch. Restart distinguishes dispatched uncertainty from blocked preflight. Veto preserves unknown outcomes and receipts. Unknowns can be checked read-only by exact handle; absence is inconclusive. Known mismatches can be checked by saved page ID or receive a distinctly owner-reported inspection. A separate owner-reported non-creation confirmation permits a new review of an unknown attempt. Known/accepted actions cannot be replayed. The API does not offer page-create idempotency keys, so local request IDs, immutable reviews and conservative unknown-outcome holds prevent automatic duplicate attempts; they do not establish provider-side exactly-once execution.
+
 ## Data and privacy
 
 `business.sqlite` stores profile, settings, agent overrides, jobs, approvals, events, usage, cache, time records, finance and audit. `personal.sqlite` stores only private interview answers and notes. The business state endpoint, business prompts, audit, evidence export and business backup exclude personal content. Personal exports require an explicit owner action.
@@ -72,4 +84,4 @@ The server binds to 127.0.0.1, rejects non-loopback Host headers and foreign Ori
 
 ## Explicit extension points
 
-Agent definitions and playbooks are JSON. Adding a provider requires one adapter in the provider module, its editable model/rate definition and contract tests. Business tools should be separate adapters with explicit per-agent permissions, immutable approval payloads, external idempotency keys and verified execution receipts. The first live adapter is the next milestone; installing a chat plugin does not authorize or create an integration inside the standalone app.
+Agent definitions and playbooks are JSON. Adding a provider requires one adapter in the provider module, its editable model/rate definition and contract tests. Business tools should be separate adapters with explicit per-agent permissions, immutable approval payloads, external idempotency keys and verified execution receipts. The Shopify unpublished-page adapter is the first executable business connection; installing a chat plugin does not authorize or create an integration inside the standalone app.

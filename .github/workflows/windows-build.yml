@@ -42,6 +42,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           npm run test:launch:browser
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:shopify:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Build Windows installer
         run: npm run package:win
       - name: Check source desktop on Windows
@@ -79,6 +81,8 @@ jobs:
             test-results/windows-*
             test-results/launch-*.png
             test-results/launch-accessibility.json
+            test-results/shopify-*.png
+            test-results/shopify-accessibility.json
             test-results/provider-models.png
           if-no-files-found: ignore
           retention-days: 14
