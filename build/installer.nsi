@@ -37,7 +37,7 @@ Section "The Hub" SEC_MAIN
   SetShellVarContext current
   SetOutPath "$INSTDIR"
   SetOverwrite on
-  File /r "${APP_DIR}/*"
+  File /r "${APP_FILES}"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   CreateDirectory "$SMPROGRAMS\The Hub"
   CreateShortcut "$SMPROGRAMS\The Hub\The Hub.lnk" "$INSTDIR\The Hub.exe"

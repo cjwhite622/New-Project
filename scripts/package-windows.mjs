@@ -14,5 +14,5 @@ const escape=value=>value.replaceAll('$','$$').replaceAll('"','$\\"').replaceAll
 const manifest=join(root,'release/uninstall-manifest.nsh');
 await writeFile(manifest,[...files.map(file=>`Delete "$INSTDIR\\${escape(file)}"`),...dirs.map(dir=>`RMDir "$INSTDIR\\${escape(dir)}"`)].join('\n')+'\n');
 const nsis=await getMakeNsisPath();
-await run(nsis.path,[`-DAPP_DIR=${appDir}`,`-DAPP_VERSION=${version}`,`-DOUTPUT_FILE=${join(root,`release/The Hub Setup ${version}.exe`)}`,`-DICON_FILE=${join(root,'build/icon.ico')}`,`-DUNINSTALL_MANIFEST=${manifest}`,join(root,'build/installer.nsi')],{...process.env,...nsis.env});
+await run(nsis.path,[`-DAPP_FILES=${join(appDir,'*')}`,`-DAPP_VERSION=${version}`,`-DOUTPUT_FILE=${join(root,`release/The Hub Setup ${version}.exe`)}`,`-DICON_FILE=${join(root,'build/icon.ico')}`,`-DUNINSTALL_MANIFEST=${manifest}`,join(root,'build/installer.nsi')],{...process.env,...nsis.env});
 process.stdout.write('Windows installer built with native NSIS. Owner data is excluded from uninstall.\n');
